@@ -4,9 +4,27 @@
 
 * 前知識
 
-1. su  postgresはスイッチユーザーのことなので、この場合postgresユーザーに切り替えるということであり、su  postgresについては、これをやるとユーザーが変わってしまうので、もしやってしまったらsu  toshikiと打てば戻れる
+⇒[参考：posgresqlのコマンド一覧](https://dev.classmethod.jp/articles/postgresql-organize-command/)
 
+1. su postgresはスイッチユーザーの事で、この場合postgresユーザーに切り替えるということである。これをやるとユーザーが変わってしまうので、もしやってしまったら su toshikiと打てば戻れる。ただのpsqlというコマンドだけだと引数にデータベース名も指定されてないのでエラーになってしまう。（FATAL:  database "toshiki" does not exist）
 
+2. configにあるdatabase.ymlにあるデータベース名を一緒に記述して入るとそのDBに入れる  
+⇒`psql willnote_development`（開発用のDBに入る）  
+⇒`psql willnote_test`（テスト用のDBに入る）  
+
+3. psql --version でバージョンとインストールされているか調べる
+
+4. psql -l でデータベース一覧表示（管理者がposgresとtoshikiとあるので何らかの流れでtoshikiも作った。posgresは最初にデフォルトの管理者）
+
+5. データベースはアプリケーションの中で消さないといけない為、先にアプリの方を消してしまうと、そのデータベースに潜らないと消せない
+
+* ユーザー登録
+
+1. `sudo -u postgres psql` で中に入る
+
+2. postgres=#に続けて、`create role postgres with createdb login password 'st1234st';` と打つ（既に作られているなら、ERROR:  role "postgres" already existsと出る）
+
+3. `ALTER ROLE postgres WITH PASSWORD 'st1234st';`でパスワードを作成。
 
 ## エラー関連
 

@@ -36,4 +36,4 @@
 ⇒すると、`sudo: code: command not found`と出てしまう。これは、vscode上にsudoというコマンドが存在しないためである。なので、  
 `sudo chmod 777 operating_system.rb`と打つと、そのパーミッションを変更出来る。777はユーザーもグループも外部ユーザーも許可。これで、`code operating_system.rb`と打って、vscodeへ。  
 
-④ctrl + f で該当文字を検索、修正。最後に`sudo gem update --system` と打つとインストール成功。次に、gem -vと打つと3.1.4と表示される。 
+④ctrl + f で該当文字を検索、修正。最後に`sudo gem update --system` と打つとインストール成功。次に、gem -vと打つと3.1.4と表示される。
