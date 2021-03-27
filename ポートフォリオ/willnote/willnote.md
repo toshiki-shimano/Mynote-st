@@ -2031,7 +2031,6 @@ def complete
 * 入力用のエラーメッセージとログインできなかった時のエラーメッセージの足りてない所の追加と表示の時間を非同期にする
 ⇒jqueryを使う。メッセージ出力コードの本体にidを設定して、そのfadeout()メソッドを使う
 
-
 ```html
 <% if flash.notice.present? %> 
     <div class="alert alert-success" id="flashMessage"> 
@@ -2138,196 +2137,198 @@ validates :password, format: { with: /\A(?=.*?[a-z])[a-z\d]{6,20}+\z/ }, on: :cr
 同じ配下のあればパスもいらず、ファイル名でいける
 ```
 
-③ライセンス（https://www.catch.jp/oss-license/2013/09/27/mit_license/）
+③[ライセンス](https://www.catch.jp/oss-license/2013/09/27/mit_license/)
 ⇒ここを参考にファイルを作っていく
 
-㉚Git
-①Githubの登録、git入門教室を読み概要を掴む
-②下記を参考にgitbashをインストール
-⇒https://blog.totsugeki.com/post-279/（これを参考にgitbashインストール）
-⇒https://hacknote.jp/archives/11885/（gitbashのconfigの消し方）
-⇒インストールできたら、、https://www.sejuku.net/blog/72673を参考に開いてみる
+### Gitの設定(詳しくはgitについてを参照)
 
-③次に秘密鍵と公開鍵を作成する
-https://qiita.com/reflet/items/5c6ba6e29fe8436c3185（フォルダを作る所からある）
-https://yu-report.com/entry/githubSSH（鍵をつくった直後のconfigの作成）
-◍echo ~　コマンドで現在のホームディレクトリを指す
-◍フォルダを作ってからではないとエラーが起きる。パスフレーズは設定しないで空打ちする
-◍無事できればtoshiki配下に.sshディレクトリ内にファイルが作成される
-```
-Your identification has been saved in /c/Users/toshiki/.ssh/id_rsa 
-Your public key has been saved in /c/Users/toshiki/.ssh/id_rsa.pub
+★ポートフォリオの上げ方
 
-id_rsaが秘密鍵、
-id_rsa.pubが公開鍵:この内容をgithubに登録すると登録したgithub所持者のgithubにキーを使って接続できる
-```
-◍次にconfigファイルをsshディレクトリ内に作る
-◍githubに公開鍵を設定
-◍ssh -T git@github.com　コマンドでカギの接続が出来るか確認（最初は、接続して大丈夫かという質問がくるのでyesを押す）
+* gitignoreファイルに.envファイル（メーラー機能を使っているなら）とconfigのmaster.keyファイル（デフォルトでgitignoreにあり）を追加
 
+* pushする場合、リモートはpublicにすること（プライベートだと相手が見えない）
 
-④techpitのgit入門へ＋サルさんのGit入門（rebaseとtag見る）
-◍２－５のtreeコマンド：gitbashでecho ~でホームディレクトリはUser/toshikiだとわかるので、cdでそこまでいき、touchで.bashrcを作成。そこにコードを書いて、gitbashを再起動すると使える
-◍https://qiita.com/rorensu2236/items/df7d4c2cf621eeddd468
-⇒最初からsshでremoteの登録をすればいちいちパスワードを聞かれない
+①`taskleaf`というプロジェクトがあるなら、`taskleaf`がカレントディレクトリの状態で始める。（railsで作ったプロジェクトは最初からinit(初期化済み)されている）  
+②`git add .`  
+③`git commit -m 'テスト'`  
 
-★ある時点でのブランチ（master）から分岐して新しいブランチ（feature）を作成したとき、そのブランチで新規ファイル作成、コミットまでやったら、それを今のリモートにpushする時、、、git push originだと、上流がないと言われる。
-⇒基本は、git push origin ブランチ名！で送信する
-⇒最初の設定で、git push -u origin ブランチ名でやると次は、-uのおかげでgit push originで済む
+④githubでリポジトリをつくる。（見せるならpublicで、nameはプロジェクト名で）  
+⇒sshURLを確認  
+⑤`git remote add origin sshのURL`  
+（ローカルのリモートにsshのリモートをoriginという名前で登録する）  
+⑥`git push origin master`  
+（リモート名とブランチ名はセット！）  
 
-★ブランチを変えて、そこでファイルを作成したときに、そのファイルを閉じないで別のブランチにチェックアウトした場合、その画面に残っているファイルは当然未保存状態になる。（そのブランチでの作業が終わったら、そのファイルを閉じることをやる）
+★基本操作
 
-★githubで直接ブランチを削除した場合、次にローカルのブランチをデリートするが、branch -aをやるとremotes/の形でリモートブランチが残ってしまう。その時は、git fetch -pで一掃できる！
-https://noumenon-th.net/programming/2019/12/29/git-branch-d/（ここを参考に！）
+⇒プロジェクトのファイルを一部変更。そのファイルをステージングする時には、`git add パス名` になるが、このパスを間違えるとうまくいかないので、正式を見るには`git status`で見るとパスが分かる。  
+⇒ファイルを変更した後に、もし完全にスペースなども考えファイルのコードを戻せるなら手動で戻すか、Ctrlとｚで最後まで戻せるなら、それを再保存すれば変更状態は解除される。  
 
-★テックピットのrebaseについては、サル入門Gitの方が正しい！
-（rebaseを使った、pushをしていないファイルの二つ以上前のコミットの修正の仕方。git commit --amendは直前のみ）
-
-
-★Gitのルール
-◍commit　push　rm　-dは絶対に確認を取ること！
-◍そのブランチの変更するときに、作業したファイルを閉じること！
-◍ローカル内でマージをした時、リモートには反映されてないのでpushが必要だが、、pushは要注意！
-◍基本rebaseは要らないが、、pullのrebaseは使えそう？他にも、コミット複数やり直しのrebase -i HEAD~3
-◍git push -fは絶対に使わない！（強制プッシュ）
-
-～ポートフォリオの上げ方～
-◍gitignoreに.envファイル（メーラー機能を使っているなら）とconfigのmaster.keyファイル（デフォルトでgitignoreにあり）
-◍pushする場合、リモートはpublicにすること（プライベートだと相手が見えない）
-
-①taskleaf というプロジェクトがあるなら、taskleafがカレントディレクトリの状態で始める。（railsで作ったプロジェクトは最初からinit(初期化済み)されている）
-②git add.
-③git commit -m 'テスト'
-④githubでリポジトリをつくる。（見せるならpublicで、nameはプロジェクト名で）
-⇒sshURLを確認
-⑤git remote add origin sshのURL
-（ローカルのリモートにsshのリモートをoriginという名前で登録する）
-⑥git push origin master
-（リモート名とブランチ名はセット！）
-～実際の操作～
-★プロジェクトのファイルを一部変更。そのファイルをステージングする時には、git add　パス名 になるが、このパスを間違えるとうまくいかないので、正式を見るにはgit statusで見るとパスが分かる。
-⇒ファイルを変更した後に、もし完全にスペースなども考えファイルのコードを戻せるなら手動で戻すか、Ctrlとｚで最後まで戻せるなら、それを再保存すれば変更状態は解除される。
 ⇒ステージングしたファイルの内、特定のファイルをコミットしたい場合は
-```
+
+```git
 git commit -m 'test' --controllers.rb
 git commit -m 'test' --controllers.rb test.rb ＃複数の場合
 ```
-⇒だたこれは、ステージングさえしなければ良い。コミットするものだけをステージングするようにしていく。
 
+### rspec（rails6のエラーあり。最初のrspecのgemインストール注意！テックピットは1章2章要らない）
 
-㉛rspec（rails6のエラーあり。最初のrspecのgemインストール注意！テックピットは1章2章要らない）
-★system specという機能を理解する（速習Ｐ１８４～Ｐ１９４）
-★https://qiita.com/amatsukix/items/578f85cf4565ca2a797c（rails6のrspecエラー）
-⇒　gem 'rspec-rails', '4.0.0.beta3'　をインストール
-◍http://vdeep.net/rubyonrails-rspec-factorybot-capybara（古いが構築の参考に）
-◍https://blog.jnito.com/entry/2019/10/25/053521（伊藤さんからのrails6のrspecの変更点）
-◍https://qiita.com/ham0215/items/7516117df87d2631e31d（databasecleanerは入れない方がいいらしい、速習でも不要とあり）
+★最初にrspec.mdのまとめを見て環境構築をする。
 
-⓪上記を確認後、下記の順で構築する。rspecのバージョンはgem 'rspec-rails', '4.0.0.beta3'。（速習でも同じ手順）
-https://takumalog.com/2020/05/08/post-104/
-◍rm -r ./testコマンドで消えるのは、プロジェクト配下のtestというディレクトリが消える。
-◍FactoryBotの省略については、、確かにあった方が何をしているか分かりやすいが、、build、create、newだけで付いていると考え慣れた方が速いかも
-◍テックピットより
-```
-bin/rails db:migrate:reset RAILS_ENV=test
-テスト用のDBを最新の構成にする
-```
-テスト用のDBとは自動テストを実行するときに利用する専用のDBの事。例えば自動テストで「全データが消えること」を確認するとき、開発中に利用しているデータが消えてしまっては困るので、開発中のデータと自動テスト用のデータの双方が干渉しないようする。
+★ここでは、先にNoteモデルとUserモデルのテストから始める
 
-▲ここで注意！：実はまだ、capybaraという機能に設定を出来ていない。
-⇒railsにはプロジェクトを作った時にすでにインストールされているが、spec_helper.rbにcapybaraをrequireしただけではまだ足りない。
-◍エラーの状況としては、テストをすると、カピバラが読み込まれていない。特に、visit login_pathのlogin_pathがnameエラーになるので、原因としてわかりにくいが、visit(URL)のやり方だと、エラーでvisitがnometodになっており、カピバラが読み込まれていないことが分かる。その解決策が以下である。
-◍https://qiita.com/terufumi1122/items/aefd6c965e9e946efc3b
-🔺：capybara~DSLをやるとテスト結果にcapybara~とは出ないがテストは通る
-🔺：まず、typeをsystemにすると、ちゃんとpuma capybara~と出てエラーが出る。ディレクトリだけをsystemという名前にしてもvisitがno methodというエラーになるので、rspecファイルのtypeが大事か
-🔺：ディレクトリをsystemにすると、その中のファイルがちゃんと色付けされる
-～解決～
-最終的には、、
-1. rspec以下のディレクトリをsystemにする
-2. テストファイルの最初の記載のtypeをsystemにする。
-3. bundle update rspec-rails capybara selenium-webdriver　を打って、各機能を最新にする（直接的な策ではないかも）
-4. これが決め手：
-⇒webdriverのエラーの上に、Failure/Error: visit("http://localhost:3000/login")　と出ていたので、普通のvisit login_pathにしたら、capybara pumaが出た状態でテストが通った！
-⇒これを考えるとvisit(URL)という手法が今のバージョンだと使えないのか。
-⇒因みに、rspec下のディレクトリをmodelsでrspecファイルのtypeもmodelだと、上記のcapybara~DSLをやるとテストは通るが、system specではないっぽいので、やはり、systemと記載した状態でテストが稼働するか確認する。
+★notesテーブル（Noteモデル）
 
-⓪スクリーンショットについて、、
-◍system specとcapybaraでテスト失敗時にスクリーンショットが記録されるが、それは、プロジェクト下のtmpファイルにある。エディタによって、表示される、されないがあるので、エクスプローラーから見るのが良い。
+* name(string型 null無し デフォ無し)
 
-①注意！：specというディレクトリができたら、factorieseというディレクトリを自分で作って、その中にモデルと同じファイルを作る（users.rb）のだが、、
-⇒例えば、Userモデルの登録のテストをするなら、rails g rspec:model User　というコマンドできちんとしたファイル名で各ファイルの最初の走り書きも付けてくれる。
-（作成されるファイルとディレクトリは、この場合specディレクトリの中にfactorybotとmodelというディレクトリが作られる）
-⇒作成したspecファイルの　pending "add some examples to (or delete) #{__FILE__}"　は要らない
-⇒したがって環境構築を終えたら、どのモデルのデータをテストするかを考える。（User、Note、Postなど）
-⇒そうなると、ER図があるとテーブルを見られて便利かも
-②UserモデルとNoteモデル
-```
-⇒ rails g rspec:model User
-⇒ rails g rspec:model Note
-```
+* memo1(text型)
 
-notesテーブル（Noteモデル）
-usersテーブル（Userモデル）
-	- name(string　null無し デフォ無し)
-	- memo1(text)
-	- memo2(text)
+* memo2(text型)
 
-＝＝最初から作るなら＝＝
-	- user(references型  null無し)
-　　⇒user_idとインデックスの自動追加
-	- name(string　null無し デフォ無し)
-	- email(string　ユニークtrue、null無し デフォ無し)
-	- password_digest(string 
-　　⇒passwordとpassword_confirmation　
-	- 後でadmin追加（boolean  null無し）
+🔺最初からアソシエするなら
+
+* user(references型  null無し)
+⇒user_idとインデックスの自動追加
+
+★usersテーブル（Userモデル）
+
+* name(string型 null無し デフォ無し)
+
+* email(string型 ユニークtrue、null無し デフォ無し)
+
+* password_digest(string型)
+⇒passwordとpassword_confirmation
+
+🔺後で追加
+
+* admin追加（boolean  null無し）
+
 1. willnoteへのログインの動作確認（userデータが登録されている必要あり）
 2. noteデータがちゃんと登録されるか
 3. ここでは、UserモデルとNoteモデルが紐づいていることも考慮に入れる
 
-⇒以上を踏まえて、テックピットではログイン機能ではないから、最初のコードは通らない。したがって、速習の順番で進めていく
+⇒以上を踏まえて、速習の順番で進めていく
 
 ①factorybotの編集
-◍ファクトリー名（:user）をモデルと違う名前で付けるときは、クラスを指定して名前を付ける
-（factory :user do     を　factory :admin_user,  class: User  do）
-◍noteのファクトリーには、下にuser（factory名）を付ける。アソシエーションしているから
-◍create(:note, name: "最初のタスク", user: user_a)のuser: はnoteファクトリーファイルの下につけたuser
-◍capubaraのfill_inの後に書く、”ログインする”などは、実際に画面上にその名前の欄があり、コードのラベル名にも書かれていないと効かない
-◍ユーザーを作成する時にadminをtrueにするか確認する
-②速習を参考にrspecファイルの記述（最初のtypeは必ずsystem）
 
+```ruby
+# notes.rb
+FactoryBot.define do
+  factory :note do
+    name { "rspecテスト" }
+    memo1 { "system spec" }
+    memo2 { "FactoryBot" }
+    user
+  end
+end
+# users.rb
+FactoryBot.define do
+  factory :user do
+    name { "テストユーザー" }
+    email { "test@au.com" }
+    password { "password" }
+  end
+end
+```
 
-🔶rspec上達！
-- .newで（）内にデータを書くときには、コンマが必要
-- ログインが必要なシステムはまずそこから書かないといけない
-- createやnewを変数に代入する場合、それを後で使うなら「＠」を付けると使いまわせる。付けないと他の場所で使えない。後は、＠を使わない変数を使う場合、スコープを考えてit文を作るなら、同じ変数データを使うにしても、もう一度.newなど記述をしないといけない
-- テストを実行するときに、そのファイルにcapybaraのメソッドが使われてない時は、ターミナルにcapybara pumaと出ない
-- factorybotと自分で.newを使うとき。同じメールアドレスの登録が出来ないことを検証するとき、factorybotで先に用意してしまうと、そもそも最初から同じデータが作られてしまうので、コード自体通らない。流れの中でデータを作りたいなら、factorybotを使わないで自身で順番に上から.newでインスタンスを作っていくと、その流れに沿って検証を行える。
-- letは、decribeかcontextの配下ではないと効かない！it配下では使えない
-- before doにログインの流れを入れている場合、ログインを必要としないテストーケースがある時は（単純な.newなど）、そのケースをbefore doの及ばない箇所に記述すること（ログインのbeforeとそれを必要とするケースをcontextで囲み、その外に新しく記述すれば、ログインの影響を受けない）
-- 原則として「1つの example につき1つのエクスペクテーション」で書いた方がテストの保守性が良くなります。
-- letは遅延評価である。letで定義されたメソッドが、結果までに呼び出されないとエラーになる
+* ファクトリー名（:user）をモデルと違う名前で付けるときは、クラスを指定して名前を付ける
+（`factory :user do`を`factory :admin_user, class: User do`）
 
-★rspecを使って考えるテスト
-①検証通りにユーザーやタスクの登録ができるか
-②アソシエを結んでいるユーザーとタスクの関係で（has_many :notes, dependent: :destroy）、ユーザーが削除されると、タスクも消えるか
-⇒下記を参考に、、
-(https://qiita.com/paranishian/items/51d3742b7095aa7744ca#%E5%8F%82%E8%80%83)
-⇒今回user_cがdestroyされたら、changeというマッチャを使って、Noteモデルのデータが減るというケースを考える。
+* noteのファクトリーには、下にuser（factory名）を付ける。アソシエーションしているから
+
+②テストファイルの編集
+
+```ruby
+# spec/system/note_spec.rb
+require 'rails_helper' #全てのテストファイル付ける
+
+RSpec.describe Note, type: :system do
+  describe "Noteモデルの検証や登録について" do
+  let(:user_a) { create(:user, name: "ユーザーA", email: "a@au.com") }
+  let(:user_b) { create(:user, name: "ユーザーB", email: "b@au.com") }
+    context "ログイン状態のケース" do
+      before do
+        create(:note, name: "rspecテスト", user: user_a)
+        create(:note, name: "system勉強", user: user_b)
+        visit login_path
+        fill_in "メールアドレス", with: login_user.email
+        fill_in "パスワード", with: login_user.password
+        click_button "ログインする"
+      end
+
+      context "ユーザーAがログインした時" do
+        let(:login_user) { user_a }
+        it "ユーザーAの作成したタスクが表示される" do
+          expect(page).to have_content "rspecテスト"
+        end
+      end
+
+      context "ユーザーBがログインした時" do
+        let(:login_user) { user_b }
+        it "ユーザーAのタスクは表示されない" do
+          expect(page).to have_no_content "rspecテスト"
+          expect(page).to have_content "system勉強"
+        end
+
+        it "ユーザーBが物理削除されたらタスクも消える" do
+          expect( Proc.new {user_b.destroy}).to change{ Note.count }.by(-1)
+        end
+        it "ユーザーBが論理削除されたらタスクは残る" do
+          expect( Proc.new {user_b.discard}).to change{ Note.count }.by(0)
+        end
+      end
+      
+    end
+  end
+end
+```
+
+* create(:note, name: "最初のタスク", user: user_a)のuser: はnoteファクトリーファイルの下につけたuser
+
+* capubaraのfill_inの後に書く、”ログインする”などは、実際に画面上にその名前の欄があり、コードのラベル名にも書かれていないと効かない
+
+* ユーザーを作成する時にadminをtrueにするか確認する
+
+★テストファイルの編集において
+
+* ログインが必要なシステムはまずそこから書かないといけない
+
+* createやnewを変数に代入する場合、それを後で使うなら「＠」を付けると使いまわせる。付けないと他の場所で使えない。後は、＠を使わない変数を使う場合、スコープを考えてit文を作るなら、同じ変数データを使うにしても、もう一度.newなど記述をしないといけない
+
+* .newで自身でデータを作成する時とfactorybotでデータ作成を行う違いについて。同じメールアドレスの登録が出来ないことを検証するとき、factorybotで先に用意してしまうと、そもそも最初から同じデータが作られてしまうので、コード自体通らない(使うなら、create後のemail:を記述して属性を代入すること)。流れの中でデータを作りたいなら、factorybotを使わないで自身で順番に上から.newでインスタンスを作っていくと、その流れに沿って検証を行える。
+
+* letは、decribeかcontextの配下ではないと効かない！it配下では使えない
+
+* before doにログインの流れを入れている場合、ログインを必要としないテストーケースがある時は（単純な.newなど）、そのケースをbefore doの及ばない箇所に記述すること（ログインのbeforeとそれを必要とするケースをcontextで囲み、その外に新しく記述すれば、ログインの影響を受けない）
+
+* 原則として「1つの example につき1つのエクスペクテーション」で書いた方がテストの保守性が良くなる。
+
+#### rspecを使って考えるテスト
+
+★アソシエを結んでいるuserとnoteの関係で（has_many :notes, dependent: :destroy）、ユーザーが削除されると、タスクも消えるか
+⇒[ここを参考に](https://qiita.com/paranishian/items/51d3742b7095aa7744ca#%E5%8F%82%E8%80%83)  
+
+⇒今回user_bがdestroyされたら、changeマッチャを使って、Noteモデルのデータが減るというケースを考える。(上のテストファイル参照)  
 ⇒まず、アソシエとログインしないとアプリを使えないので、factorybotを使ってアソシエしたタスクを作って、capybaraを使ってログインをする。
 ⇒ここで、it構文の中身をchangeメソッドの書き方でこのように書きたくなるが
-```
+
+```ruby
 expect(user_b.destroy).to change{ Note.count}.by(-1)
 ```
-⇒ここでテスト実行すると、but was not given a blockというエラーが出る。そこで何でもいいのでブロックの形で渡せばという考えで、user_cをProc.newでプロックオブジェクトにしてやるとうまくいく。（changeはexpectの内容をブロックにして渡さないといけない）
-```
+
+⇒ここでテスト実行すると、`but was not given a block`というエラーが出る。そこで何でもいいのでブロックの形で渡せばという考えで、user_cをProc.newでプロックオブジェクトにしてやるとうまくいく。（changeはexpectの内容をブロックにして渡さないといけない）
+
+```ruby
 expect( Proc.new {user_b.destroy}).to change{ Note.count }.by(-1)
 expect( Proc.new {user_b.destroy}).to change{ user_c.notes.count }.by(-1)
 #どちらでも通る
 ```
 
-③コントローラーテスト
+#### sessionコントローラーテスト
+
 ⇒コントローラーをテストするには、spec下にrequestsディレクトリを作って、rspecファイルのtypeをrequestにする。一番簡単なテストがこちら
-```
+
+```ruby
 require "rails_helper" 
 RSpec.describe "sessionコントローラー", type: :request do 
   describe "正しくログインできるか" do 
@@ -2338,37 +2339,70 @@ RSpec.describe "sessionコントローラー", type: :request do
   end 
 end
 ```
-◍２００は、リクエスト成功のステータスコードで、 、ページがちゃんと表示されていれば通る 、３０２はリダイレクト。
-★https://qiita.com/tanutanu/items/14b0a1729069b53aa5b8（リクエストでログインをする方法）
-★https://qiita.com/necojackarc/items/17bbeae646e331eb5649（rspec下にsupporディレクトリを作って、オリジナルメソッドを使えるようにする）
-⇒これに追加で、rails_helperファイルのRSpec.configure do |config|下にconfig include モジュール名を記述
-★postで登録する場合のparamsの渡し方
-```
-post users_path, params: { user: { name: "tarou", email: "abc@au.com", admin: false, password: "password", password_confirmation: "password" }}
+
+⇒200は、リクエスト成功のステータスコードで、 ページがちゃんと表示されていれば通る。302はリダイレクト。  
+**★準備の仕方とオリジナルhelperメソッドを使うための準備は、rpsec.mdを参照**
+
+#### 画像の登録のテスト(systemspec)
+
+★画像のコードの書き方は、rspec.mdの前知識を参照
+
+* 画像の呼び出し方は、`Rack::Test::UploadedFile.new(File.join(Rails.root, '画像ファイルがある場所のパス'))`
+⇒specディレクトリ内にfixturesというディレクトリを作成して、そこに画像を置く
+
+```ruby
+RSpec.describe Post, type: :system, js: true do #このテストでは殆んどjsを使うのでここにjs: trueを設定
+  describe "画像投稿に関する機能テスト" do
+  let(:user_admin) { create(:user, admin: true, id: 1) } #admin用のボタン検証するためにidを設定
+  let(:post_admin) { Post.create( caption: "test", user_id: user_admin.id, id: 10 )} #登録された画像を追うためにidを設定
+
+    before  do
+      @photo = Photo.create(
+        image: Rack::Test::UploadedFile.new(File.join(Rails.root, 'spec/fixtures/forest.jpg')),
+        post_id: post_admin.id
+      )
+      visit login_path
+      fill_in "メールアドレス", with: user_admin.email
+      fill_in "パスワード", with: user_admin.password
+      click_button "ログインする"
+      click_link "管理人ブログ"
+      find('.drawermark').click
+      click_link "投稿一覧"
+    end
+
+    context "adminユーザーの画像登録において" do
+      it "画像が登録されている" do
+        expect(@photo.save).to be_truthy
+      end
+
+      it "いいねが出来ている" do 
+        find('#like-icon-post-10').click
+        expect(page).to have_content "いいね！"
+      end
 ```
 
-④画像の登録のテスト
-◍https://nanayaku.com/rails-rspec-carrierwave/（基本があり）
-⇒UserモデルとPostモデルとPhotoモデルのアソシエ（id）を考える
+⇒UserモデルとPostモデルとPhotoモデルのアソシエ（id）を考える  
 ⇒imageのパスは画像があればどこのディレクトリでも大丈夫なので、テスト用にrspec下に置いてもいいし、直接画像があるjavascript下から追っても良い
-⑤テストデータの自動削除？
-◍画像登録のテストなどをしていくとデーターが溜まっていく？らしいので、upload設定ファイルの画像が登録される場所を変えるなどの操作があるらしいが、、https://qiita.com/tmyn470/items/6355c252022e80d682d8（画像データの自動削除）
-必要ないか？https://qiita.com/a_ishidaaa/items/b17ca8fa1a50ed5c3802（テストデータはどこへ消えた？）
-⑥rspecとcapybaraとjavascript
-⇒https://qiita.com/koki_73/items/ffc115ed542203161cef（javascriptの設定とやり方）
-◍本記事では、featuteテストで行っているがsystemテストでも同じようにできる
-◍次に、describe、context、itのdoの直前にjs: true を入れるとcapybaraで触れるようになる（jsを使いたい所に記述する）
 
-★投稿画像一覧に飛べないエラーについて：下記は通らないコード
-```
+#### rspecとcapybaraとjavascript
+
+* [javascriptの設定とやり方](https://qiita.com/koki_73/items/ffc115ed542203161cef)
+
+⇒本記事では、featuteテストで行っているがsystemテストでも同じようにできる
+⇒describe、context、itのdoの直前に`js: true`を入れるとcapybaraで触れるようになる（jsを使いたい所に記述する）
+
+🔺注意🔺：投稿画像一覧に飛べないエラーについて：下記は通らないコード
+
+```ruby
+#上の正しいコードと見比べてみる
 RSpec.describe Photo, type: :system, js: true do  
     before  do 
-        @user = create(:user, admin: true) 
+        @user = create(:user, admin: true) #ここが問題！
         @post = Post.create( 
             caption: "test", 
             user_id: @user.id 
         ) 
-        @photo = Photo.new( 
+        @photo = Photo.new( # ここが問題！
             image: Rack::Test::UploadedFile.new(File.join(Rails.root, 'spec/fixtures/forest.jpg')), 
             post_id: @post.id 
         ) 
@@ -2384,259 +2418,342 @@ RSpec.describe Photo, type: :system, js: true do
         expect(@photo).to be_valid 
     end
 ```
-◍問題について：find~clickでドロアーをクリックは出来たけど、次のclick_linkで投稿一覧にいけない
-🔺エラー：
-①user_idの１が見つからない
-②それを解消しても、imageにデータが登録されてない
 
-～①のエラーについて～
-⇒このエラーは、ブログの画像表示を管理者のものだけにするため、postコントローラーでUser.find(1).posts~でデータを表示させるようにしていたので、実際には投稿一覧にはユーザーid(1)が表示されないといけないという自身の作った環境が原因。そもそもテストデータが作られている時にユーザーidが１で作られているかわからないということもあったので、先ず、userをcreateしているrspecファイル中にbinding.pryを置いてみる。そうするとidが１ではないユーザーが作成されていたので、userをfactorybotでcreateする時に、user_id: 1　に設定したら、そのユーザーが作成された。
+🔺エラー🔺：find~clickでドロアーをクリックは出来たけど、次のclick_linkで投稿一覧にいけない  
+①user_idの１が見つからない  
+②それを解消しても、imageにデータが登録されてない  
 
-～②のエラーについて～
+🔶重要🔶：①のエラーについて
+⇒このエラーは、ブログの画像の作成は管理者しか出来ないという設定しており、表示される画像もpostコントローラーでUser.find(1).posts~でデータを表示させるようにしていたので、実際には投稿一覧にはユーザーid(1)が表示されないといけないという自身の作った環境が原因。そもそもテストデータが作られている時にユーザーidが１で作られているかわからないということもあったので、先ず、userをcreateしているrspecファイル中にbinding.pryを置いてみる。そうするとidが１ではないユーザーが作成されていたので、userをfactorybotでcreateする時に、user_id: 1に設定したら、そのユーザーが作成された。
+
+🔶重要🔶：②のエラーについて
 ⇒user_id: 1 が作られると今度は、imageがnilというエラーが出る。これも事態が掴めなかった為に、binding.pryで@photoを調べてみたら、確かにデータが入ってなかった。その時に、Photoデータの作られ方に目がいった為に気付けたが、どうやらモデルからデータを作成する時に、.newで作成していたのが原因だった。引数は持っていたのにデータは入ってなかった。これを.createにすることによってimageデータがちゃんと入っていた。
 
 ～総括～
-⇒以上の事から、ドロアークリック後にclick_linkでそのリンクに飛べること確認ができ、テストも通った。自身で画像一覧ページは、find(1)で設定しているのでテストユーザーの作成にもidを１にすることを忘れないようにする。
+⇒以上の事から、ドロアークリック後にclick_linkでそのリンクに飛ぶこと確認ができ、テストも通った。自身で画像一覧ページは、find(1)で設定しているのでテストユーザーの作成にもidを１にすることを忘れないようにする。
 
-⑦お問い合わせテスト
+#### お問い合わせテスト(メール用のマッチャを使うには)
+
 ★前提
-⓪今回は、mailer specになるので、ディレクトリ名をmailers、spec内のtypeをmailerにする
+
+* 今回は、mailer specになるので、ディレクトリ名をmailers、spec内のtypeをmailerにする
+
 ①config/environments/test.rbの中で、
-```
+
+```ruby
 config.action_mailer.delivery_method = :test
 ```
-とあるが、これのおかげでspec内で　ActionMailer::Base.deliveries.lastというコードでActionMailerインスタンスを取得できる。
-ActionMailer::Base.deliveries.lastの戻り値を変数か（@mailなど）subject入れて使う。
+
+とあるが、これのおかげでspec内で`ActionMailer::Base.deliveries.last`というコードでActionMailerインスタンスを取得できる。`ActionMailer::Base.deliveries.last`の戻り値を変数か（@mailなど）subject入れて使う。
 ⇒このメソッドは、必ず、deliveriesのあとに何かしたら付けないとエラーになる。これでメール情報を取得できるので、マッチャと組み合わせてテストする。
-ActionMailer::Base.deliveries.last
-最後に送信されたメールを取得
-ActionMailer::Base.deliveries.last.body
-最後に送信されたメールの本文を取得
-ActionMailer::Base.deliveries.first
-最初に送信されたメールを取得
-②メールの本文（body）は本文以外の情報(encodingなど)も含まれるため、eq matcherではなくmatch matcherを使用する。そのためにメール本文をencodeしないと日本語のテストができない。
+
+★メソッド一覧
+
+* ActionMailer::Base.deliveries.last(最後に送信されたメールを取得)
+
+* ActionMailer::Base.deliveries.last.body(最後に送信されたメールの本文を取得)
+
+* ActionMailer::Base.deliveries.first(最初に送信されたメールを取得)
+
+```ruby
+require "rails_helper"
+
+RSpec.describe Contact, type: :mailer do
+    after { ActionMailer::Base.deliveries.clear } 
+    let(:new_mail) { Contact.create(name: "test", email: "test@au.com", content: "日本語テスト") }
+    let(:mail) { ContactMailer.received_email(new_mail)}
+
+    it "メールが実際に送られているか" do
+        expect do
+            mail.deliver_now
+        end.to change { ActionMailer::Base.deliveries.size }.by(1)
+    end
+
+    context "送られたメールの内容がきちんと取得できる(email_spec使用)" do #deilver_nowは必ずit内に記述する
+        
+      it "宛先へ送られている" do
+          mail.deliver_now
+          expect(open_last_email).to deliver_to(ENV["LOGIN_NAME"]) 
+      end
+
+      it "記入した件名が記載されている" do
+          mail.deliver_now
+          expect(open_last_email).to have_subject("【willnote】webサイトよりお問い合わせがありました") 
+      end
+      
+      it "記入したメール内容が記載されている" do
+          mail.deliver_now
+          expect(open_last_email).to have_body_text(/日本語テスト/) 
+      end
+    end
+end
 ```
-# let(:mail_body) { mail.body.encoded.split(/\r\n/).map{|i| Base64.decode64(i)}.join }
+
+* メールの本文（body）は本文以外の情報(encodingなど)も含まれるため、eq matcherではなくmatch matcherを使用する。そのためにメール本文をdecodeしないと日本語のテストができない。
+
+```ruby
+let(:mail_body) { mail.body.encoded.split(/\r\n/).map{|i| Base64.decode64(i)}.join }
 ```
+
 ⇒上記のようなことで文をencodeもできるが、上記のコードは日本語（UTF-8）対応していない。
 
-③gem email_specのインストール
-⇒http://totutotu.hatenablog.com/entry/2015/09/23/%E3%80%90%E3%83%86%E3%82%B9%E3%83%88%E7%B7%A8%E3%80%91ActionMailer%E3%81%A7%E3%83%A1%E3%83%BC%E3%83%AB%E3%82%92%E9%80%81%E4%BF%A1%E3%81%99%E3%82%8B（参考）
-⇒https://github.com/email-spec/email-spec#rspec-matchers
-（公式：見るのはメソッドだけでよい。途中にある、rails generate email_spec:stepsコマンドをやると、expect内で使えるオプションの内容が使える）
-◍注意：githubの公式に色々あるが、、基本的には、gemをインストールして、rails_helperに「require"email_spec"」を記述（つけなくてもなぜか動く）
+★`gem email_spec`のインストール
+
+⇒[下準備の所だけ見る](http://totutotu.hatenablog.com/entry/2015/09/23/%E3%80%90%E3%83%86%E3%82%B9%E3%83%88%E7%B7%A8%E3%80%91ActionMailer%E3%81%A7%E3%83%A1%E3%83%BC%E3%83%AB%E3%82%92%E9%80%81%E4%BF%A1%E3%81%99%E3%82%8B)
+
+⇒[公式ホームページ](https://github.com/email-spec/email-spec#rspec-matchers)  
+⇒ここでは、マッチャのメソッド（have_subjectなど）を確認。途中のページにある、rails generate email_spec:stepsコマンドをやると、expect内で使えるオプションの内容が見れる）
+
+🔶重要🔶：githubの公式に色々あるが、、基本的には、gemをインストールして、rails_helperに「require"email_spec"」を記述（つけなくてもなぜか動く）
 ⇒必ず、rails_helperに
-```
-RSpec.configure do |config|　配下に
+
+```ruby
+RSpec.configure do |config|配下に
 
 config.include(EmailSpec::Helpers) 
 config.include(EmailSpec::Matchers)
 ```
+
 を入れるか、specファイル内でincludeする。（これは記述しないとエラーになる）
-```
+
+```ruby
 describe "Signup Email" do 
   include EmailSpec::Helpers 
   include EmailSpec::Matchers  
 end
 ```
-◍注意：ここでマッチャの方に目が行きがちだが、、expectの（）内も対応したメソッドを使わないとマッチャも使えないようになっている
-```
-mail.deliver_now
-expect(open_last_email).to deliver_to(ENV["LOGIN_NAME"])　＃open_last_emailと使わないとdeliver_toが使えない
-```
-⇒注意：かなりこれが無いと、という依存関係が強い。上記のmailはletの変数だが、この設定にもきちんとContactモデルからcreateして、そのデータをmailerをジェネレートした時に作ったreceived_emailメソッドに入れてメールを生成すること
-⇒さらに、メールを送るメソッドのdeliver_nowメソッドは、received_emailメソッドの後ろに付けて使えるはずなのだが、これをletなどにまとめてしまうとそのletの中で送信が完結してしまうらしく、リアルタイムに反映させるためにはit文の中でdeliver_nowメソッドを使う必要がある。
 
-㉜論理削除
-⇒論理削除を実装するのに便利なgemが二つあるが、paranoiaは非推奨（ActiveRecordをオーバーライドしてしまいコンフリクトする可能性がある）なのでdiscardを使う
+🔺注意🔺：ここでマッチャの方に目が行きがちだが、、expectの`open_last_email`のように対応したメソッドを使わないとマッチャも使えないようになっている。
+
+```ruby
+mail.deliver_now
+expect(open_last_email).to deliver_to(ENV["LOGIN_NAME"]) #open_last_emailと使わないとdeliver_toが使えない
+```
+
+⇒上記のmailはletで定義したメソッドだが、この設定にもきちんとContactモデルからcreateして、そのデータをmailerをジェネレートした時に作ったreceived_emailメソッドに入れてメールを生成すること
+（このreceived_emailは以下のapp/mailer/contact_mailer.rbというActionMailerでジェネレートした時に作成したクラスのメソッドを持ってきている）
+
+```ruby
+class ContactMailer < ApplicationMailer
+  def received_email(user)
+    @user = user
+    mail from: @user.email,
+         to: ENV["LOGIN_NAME"], #自身にお問い合わせが来るように設定
+         subject: "【willnote】webサイトよりお問い合わせがありました"
+  end
+end
+```
+
+🔶重要🔶さらに、メールを送るメソッドのdeliver_nowメソッドは、received_emailメソッドの後ろに付けて使えるはずなのだが、これをletなどにまとめてしまうとそのletの中で送信が完結してしまうらしく、リアルタイムに反映させるためにはit文の中でdeliver_nowメソッドを使う必要がある。
+
+### 論理削除
+
+★論理削除を実装するのに便利なgemが二つあるが、paranoiaは非推奨（ActiveRecordをオーバーライドしてしまいコンフリクトする可能性がある）なのでdiscardを使う
 
 ★discardについて
-https://qiita.com/piggydev/items/05e7276ed0cada69da76（参考：基礎）
+[参考：基礎](https://qiita.com/piggydev/items/05e7276ed0cada69da76)
 
-①gem 'discard'をインストール
+①`gem 'discard'`をインストール
+
 ②discard機能を使う予定のmodelへの追加マイグレーションファイルを作成（今回ならUserモデルへ：usersテーブルに追加）
-```
+
+```linux
 rails g migration add_discarded_at_to_users discarded_at:datetime:index
 ```
-⇒変更せずマイグレイトする
-⇒因みに今まで作成されていたユーザーにも自動的にこの属性が付与されるので消さなくても大丈夫
+
+⇒変更せずmigrateする。因みに今まで作成されていたユーザーにも自動的にこの属性が付与されるので消さなくても大丈夫
+
 ③Userモデルでdiscardを機能させることを宣言
-```
+
+```ruby
 include Discard::Model
 ```
-④新たにユーザーを作って、discard_atカラムが付くのを確認。実際にコンソールでユーザーを論理削除すると、データベースからの検索はできる。
-◍ビューコードのlink_toのコードは変更しなくて大丈夫（method: :deleteはあくまでルーティングからコントローラーのdestroyアクションに飛ばすための記述）
-◍destroyアクションのdestroyをdiscardに変えると論理削除できる。何も工夫をしないで実際の画面から削除すると、画面にデータが残ったままになってしまうので⑤へ
+
+④新たにユーザーを作って、discard_atカラムが付くのを確認。実際にコンソールでユーザーを論理削除すると、データベースからの検索はできる。  
+⇒ビューコードのlink_toのコードは変更しなくて大丈夫（method: :deleteはあくまでルーティングからコントローラーのdestroyアクションに飛ばすための記述）  
+⇒destroyアクションのdestroyをdiscardに変えると論理削除できる。何も工夫をしないで実際の画面から削除すると、画面にデータが残ったままになってしまうので⑤へ
 
 ⑤画面に論理削除されてないユーザーのみ表示する
 ⇒Userモデルに下記のコードを記述すると、usersコントローラーindexアクションのUserの後ろに付けるもので表示が変化する
-```
-default_scope -> { kept }
 
-indexアクションに、、
-@users = User.all　＃disされてないユーザーが残る
-@users = User.with_discard　＃全てのユーザーが残る
-@users = User.with_discard.discard　＃disされたユーザーだけ残る
+```ruby
+default_scope -> { kept } #実はこれは要らない
+
+# indexアクションに、、
+@users = User.all #disされてないユーザーが残る
+@users = User.with_discard #全てのユーザーが残る
+@users = User.with_discard.discard #disされたユーザーだけ残る
 ```
-🔺注意：画面から消えたdisされたユーザーはコンソールで検索できなくなってしまう。代わりに、disされたユーザーだけが残るコードにすれば画面上は確認できる。
-⇒User.allとUser.with_discard.discardの変数を分ければ別々に表示はできるが、、表示するときは直接<%= disusers.name %>とダイレクトに打ってもエラーになるので、each文で変数を一度ブロックに渡す必要がある。（<% @users.each do |user| %>）
-★解決：モデルにkeptと打ってしまうとコンソールでも表示されない為、コントローラーにUser.keptと記述すると画面には表示されず、コンソールには出てくるようになる。
-⑥削除を退会にする
-◍ビューの削除ボタン退会に変更
-◍indexアクションに＠@disusers = User.with_discarded.discardedを記述
+
+🔺注意🔺：上の設定だと画面から消えたdisされたユーザーはコンソールで検索できなくなってしまう。代わりに、disされたユーザーだけが残るコードにすれば画面上は確認できる。
+⇒`User.all`と`User.with_discard.discard`の変数を分ければ別々に表示はできるが、、表示するときは直接`<%= disusers.name %>`とダイレクトに打ってもエラーになるので、each文で変数を一度ブロックに渡す必要がある。（`<% @users.each do |user| %>`）
+
+🔶解決🔶：モデルにkeptと打ってしまうとコンソールでも表示されない為、コントローラーにUser.keptと記述すると画面には表示されず、コンソールには出てくるようになる。
+
+```ruby
+def index
+    @users = User.kept
+    @disusers = User.with_discarded.discarded
+end
+```
+
+⑥削除を退会にする  
+⇒ビューの削除ボタン退会に変更
+⇒indexアクションに`@disusers = User.with_discarded.discarded`を記述
 ⇒ユーザー一覧のビューに<%= @disusers.count %>を入れて退会者数が分かるようにする
 
-
-～ファイナルパート～
-🔶前提：Apiとは
-◍APIとはソフトウェアやアプリケーションなどの一部を外部に向けて公開することにより、第三者が開発したソフトウェアと機能を共有できるようにしてくれるもの。
-◍https://data.wingarc.com/what-is-api-16084（APIとは）
-◍『web技術の基本』を読む
-◍rails6ではcoffeescriptは使わない（ー>などの関数は使わない）ので、railsチュートリアルではなく、まとめられたものを読む。
-◍https://pikawaka.com/javascript/json（⓪から始めるjson入門）
-
-🔶Ajaxと非同期通信とは
-◍https://pikawaka.com/word/ajax（Ajaxとは）
-◍https://pikawaka.com/rails/ajax-jquery（railsをつかってAjaxチュートリアル）
-◍非同期通信は、サーバーへのリクエスト中に別のリクエストを送れる事。そして、受信と送信もずらすことができる。（同期通信は、リクエストとレスポンスが終わらないと次のリクエストは出来ない）。Ajaxは、読み込みなしで一部の部分を変更できる機能であり、アプローチ方法。
-⇒非同期通信とは、あくまで次のリクエストをサーバーのレスポンスを待たないで送れることであり、受信もできる仕組みであり、それを実際に実装する方法としてAjaxがある。
-https://applingo.tokyo/article/654（非同期通信をAjaxを使って説明してみた）
-
-🔶Apiを叩くとは
-◍railsにはApiモードというのがある
-◍https://nyakanishi.work/implement-simple-api-in-local-environment/（超簡易的API）
-◍【Ruby on Rails】rails で api を叩いてみよう（初心者から中級者向け）（youtube）
-
-🔶Rest-apiとは
-
-
-🔶ページネーション
-
-◍https://github.com/kaminari/kaminari（公式）
-
-
-★ページネーションをajaxを使って非同期通信を実装する
-⓪kaminari（https://pikawaka.com/rails/kaminari（ピカワカ基礎）を見ながら）
-★注意：このgemに限らずだが、このgemではnavタグが重要であり、postページのドロアーのコードの中に<%= paginate @notes %>を入れるとnavクラスのページネーションまで外に行ってしまうため、postpage  navのｃｓｓに入らないようにこのコードを入れること。
-★ページネーションを作成すれば、背景画像の無駄な拡大を防ぐこともできる。
-◍pageメソッド：page(params[:page])を渡すとビューで<%= paginate @notes %>のように使えるようになる？
-◍perメソッド：per（）の引数に１と入れると1データで1ページになる
-```
-@notes = current_user.notes.order(created_at: :desc).page(params[:page]).per(1)
+```html
+<table>
+    <tr><th>『退会者数：<%= @disusers.count %>』</th></tr>
+</table>
 ```
 
-◍ビューに下記のコードを入れるとper()ごとのデータのページネーションが表示される
+* 退会にしたユーザーを戻すには、ターミナルでpostgreに繋いでから、コンソールで`User.discarded`で退会したユーザーの一覧が見えるので、そのidを使って、User(3).undiscardすれば復活する
+
+### ページネーション
+
+★[公式](https://github.com/kaminari/kaminari)  
+★[ピカワカ基礎](https://pikawaka.com/rails/kaminari)  
+⇒ページネーションを作成すれば、背景画像の無駄な拡大を防ぐこともできる。
+
+🔺注意🔺：今回この実装において、postindexビューでページネーションが出ないという事が発生。このgemに限らずだが、このgemではnavタグに影響があり、postページのドロアーのコードの中に<%= paginate @notes %>を入れるとnavクラスのページネーションまで外に行ってしまうため、postpage  navのcssに入らないようにこのコードを入れること。
+⇒つまり、postindexビューではpostPageクラスの中にドロアーrenderのコードがあるが、その外に置かないと、ページネーションのnavタグもpostPage navの影響を受けてしまう
+
+* pageメソッド：page(params[:page])を渡すとビューで<%= paginate @notes %>のように使えるようになる
+
+* perメソッド：per（）の引数に１と入れると1データで1ページになる
+
+```ruby
+def index
+    @notes = current_user.notes.order(created_at: :desc).page(params[:page]).per(5)
+end
 ```
+
+★ビューに下記のコードを入れるとper()ごとのデータのページネーションが表示される
+
+```html
 <%= paginate @notes %>
-<%= page_entries_info(@notes) %> ページの件数を表示
+<%= page_entries_info(@notes) %> <!-- こちらのコードは、ページの件数を表示する -->
 ```
 
-◍上記だけだと見た目を変えられないので、下記のコードでkaminari用のviewファイルを作る
-```
+★上記だけだと見た目を変えられないので、下記のコードでkaminari用のviewファイルを作る
+
+```html
 rails g kaminari:views bootstrap4
+<!-- viewsの後に、自身の使っているcssフレームワークを必ず付けること。これを作成してからビューのページネーションを見ると、ただの数字だった表示に枠がついて、bootstrapが適応されたデザインになった。 -->
 ```
-⇒viewの後に、自身の使っているcssフレームワークを必ず付けること。これを作成してからビューのページネーションを見ると、ただの数字だった表示に枠がついて、bootstrapが適応されたデザインになった。
-◍config/locales/にkaminari_ja.ymlファイルを作り、テンプレート（ピカワカ）を貼る。（この記事はここまで見ればよい）
-◍page_entries_infoもymlファイルで表示を変えられる
 
-◍以下のコマンドでkaminariのコンフィグを作成できる
-```
+⇒このコマンドでviewにkaminariディレクトリが作成され、7つのファイルが出来上がる。これらは、表示されるページネーションの一つ一つのボタン（最初ボタン、最後ボタン、ページボタン、次へボタンなど）の表示を扱っており、ここを変えると影響が見られる。
+
+* config/locales/にkaminari_ja.ymlファイルを作り、テンプレート（ピカワカ）を貼る。（この記事はここまで見ればよい）
+⇒これでページネーションが日本語表記になる
+
+* page_entries_infoもymlファイルで表示を変えられる
+
+* 以下のコマンドでkaminariのコンフィグを作成できる(これは必要ないかも)
+
+```linux
 rails g kaminari:config
 ```
-①ページネーションのcss編集
-⇒先ほど、kaminari用のviewファイルを作成したが、これらのファイルにはいくつかクラスで名前がつけてあり、例えば、_pagentor.html.erbのファイルにはpaginaetionというクラスの名前がulタグについており、下記のようにcssを変えると中央寄せができる。
-```
+
+★ページネーションのcss編集
+
+⇒先ほど、kaminari用のviewファイルを作成したが、これらのファイルにはいくつかクラスで名前がつけてあり、例えば、_pagentor.html.erbのファイルには`pagination`というクラスの名前がulタグについており、下記のようにcssを変えると中央寄せができる。つまり、kaminariの各ファイルのクラスを把握すれば自由にデザインできる
+
+```css
 .pagination { 
   justify-content: center; 
 }
 ```
-⇒つまり、kaminariの各ファイルのクラスを把握すれば自由にデザインできる
 
-◍件数表示は検証を見てみるとクラスが指定されてないので、text-centerを指定すれば真ん中に移動する
-```
+* 件数表示は検証を見てみるとクラスが指定されてないので、text-centerを指定すれば真ん中に移動する
+  
+```html
 <div class="text-center"><%= page_entries_info(@notes) %></div>
 ```
 
 ★ページネーションｃｓｓの各クラス
-.pagination
-◍ウィンドウ全体部分
-◍中央寄せするなら
-.page-item
-◍表示されている枠部分の範囲
-.page-link
-◍数字とその背景
-.active
-◍このクラスが付いているだけでcurrentページが青くなる
-◍　'views.pagination.truncate'などviews.～というコードはymlのメソッドを呼んでいる。（表示の出方）
 
-🔶進め方について：
-⇒Restfulなアプリを実装していく場合、Vue.jsを使ったり、grapeなどのgemを使う、フロント側のアプリとバック側のアプリに分けて作成など色々あるが、、
-前提知識としていきなりVue.jsを勉強するとかではなく、「railsだけでAJAXを使う」という所から始めるのが良い。その発展としてそこにVue.jsを組み込んでいくという段取りの方が良し。
-よって、最後にrailsだけを使って、、kaminariのgem無しで！ajaxを混ぜたページネーションを実装する。
+* .pagination
+⇒ページネーション全体部分
+⇒中央寄せするなら
 
+* .page-item
+⇒表示されている枠部分の範囲
 
-1. 
-🔶メモ：
+* .page-link
+⇒数字とその背景
 
-◍https://lab.syncer.jp/Tool/JSON-Viewer/（json構文チェック）
+* .active
+⇒このクラスが付いているだけでcurrent(現在のいるページ)ページが青くなる
 
+* 'views.pagination.truncate'などviews.～というコードはymlのメソッドを呼んでいる。（表示の出方）
 
+### インクリメンタルサーチ（ユーザー管理一覧）
 
-★Ajax
-https://www.sejuku.net/blog/28967（簡単なajax実装）
-https://pikawaka.com/rails/ajax-jquery
-j は、escape_javascript のエイリアスで、改行と括弧をエスケープしてくれるメソッドです。
-```
-$('#apple-form').html("<%= j (render 'form') %>");
-```
-⇒恐らくjqueryのメソッド内でerbを使う、renderを使う場合にエスケープする
+[インクリメンタルサーチ](https://qiita.com/yuki-n/items/fdc5f7d5ac2f128221d1)
 
-🔶インクリメンタルサーチ（ユーザー管理一覧）
-https://qiita.com/yuki-n/items/fdc5f7d5ac2f128221d1（インクリメンタルサーチ）
 ⓪最初に流れを簡単に表すと、、
+
 1. クラス名ID名が付いた検索窓を作成（formタグ）
 2. 検索窓から入力されたデータを取得（jqueryのfunctionメソッドとval()メソッド）
 3. 取得したデータをajaxでリクエスト送信（表示したいURLにではなく、中間アクションへ送る）
-4. リクエストされ、ルーティングを通り、指定したアクションを稼働し、このアクションから表示したいページのアクションへrenderするようにする
+4. 中間となるアクションから表示したいページのアクションへrenderするようにする
 5. 表示したいアクションにデータが届いたら、done()メソッドを使って、表示する処理を決め、ビューにその結果を表示するコードを書く
-①ここではユーザー一覧を例にとる
-◍先ず、userのindexビューに検索窓を設置
-```
+
+①先ず、userのindexビューに検索窓を設置
+
+```html
 <input type=form id="form" placeholder="ユーザー名を入力してください" style="width: 250px;"/>
 ```
-◍次に、jsファイルを用意（今回は、javascriptディレクトリ内に設置：このファイルが有効になるためには、application.jsでファイル名を読み込み、jqueryをrequierする）
-```
-$(document).on('turbolinks:load', function(){ 
+
+②次に、jsファイルを用意（今回は、javascriptディレクトリ内に設置：このファイルが有効になるためには、application.jsでファイル名を読み込み、jqueryをrequierする）
+
+```javascript
+$(document).on('turbolinks:load', function(){ //リロードしなくてもjsが動くようにする
     $(document).on('keyup', '#form', function(e){ 
-        e.preventDefault(); 
+        e.preventDefault(); //キャンセル可能なイベントをキャンセル
         var input = $.trim($(this).val());
 ～～～～～～～
 ```
-◍ajaxメソッドを追記
-```
+
+>jQuery(document).readyや、 $(function()の記述では、ページの読み込みを起点として発火します
+>⇒つまり、画面の一部が切り替わった場合はイベントが発生しないことになります。
+>⇒そこで、Turbolinksを無効化させる、Ajax後にも発火するように設定する、ということで対処していきます。
+
+* inputタグのform属性とイベントのkeyupに関する流れで、preventDefaultをかけないとデフォルトでついてくる必要のない動作をしてしまう
+
+②ajaxメソッドを追記
+
+```javascript
 $(document).on('turbolinks:load', function(){ 
     $(document).on('keyup', '#form', function(e){ 
         e.preventDefault(); 
         var input = $.trim($(this).val()); 
         $.ajax({ 
-            url: '/users/search', 
-            type: 'GET', 
-            data: ('keyword=' + input),  
-            processData: false, 
-            contentType: false, 
-            dataType: 'json' 
+            url: '/users/search', //urlを指定
+            type: 'GET', //メソッドを指定
+            data: ('keyword=' + input), //コントローラーに渡すデータを'keyword=input(入力された文字のこと)'にするように指定
+            processData: false, //おまじない
+            contentType: false, //おまじない
+            dataType: 'json' //データ形式を指定
         })
 ```
-⇒URLについては、後でルーティングで作る
+
+⇒`data: ('keyword=' + input)`について、ここでは、inputは取得してきた値が入った変数。そしてその内容を、keywordという変数に入れて、その変数をコントローラーで使いデータを渡せるようにする（渡すときは、params[:keyword]で受け取る）
+
+③ajaxで指定したルーティングを作る
 （一度別のアクションに飛ばして、そのアクションから表示させたいアクションへ飛ばす。この中間アクションにビューは要らない）
 ◍ルーティングを設定して、usersコントローラーにsearchアクションを作る。
-```
+
+```ruby
 resources :users, only: %i(index create destroy edit update) do 
     collection do 
       get 'search' 
     end 
   end
 ～～～～～～～～～～～～～
+# usersコントローラー
 def search 
   @users = User.where('name LIKE(?)', "%#{params[:keyword]}%")  
   respond_to do |format|  
@@ -2644,15 +2761,24 @@ def search
   end 
 end
 ```
-⇒whereのlike検索の第二引数に使うワイルドカードで検索の一致の仕方を変えられる
-完全一致なら、like検索の％を両方外すか、下記の方法もある
-```
+
+⇒whereのlike検索の第二引数に使うワイルドカードで検索の一致の仕方を変えられる。完全一致なら、like検索の％を両方外すか、下記の方法もある
+
+```ruby
 @jsusers = User.find_by(name: params[:keyword])
 ```
 
-②ユーザー管理一覧のビューに検索結果を出したい場所にクラス名付きのulタグを記述
-◍jsファイルのajax()メソッドの後にdoneメソッドでulタグの中にsearchアクションから送られたデータを元にliタグを入れるコード記述
+④ユーザー管理一覧のビューに検索結果を出したい場所にクラス名付きのulタグを記述
+
+```html
+<ul id="result">
+<!-- この中に<li>ユーザー名</li>みたいに検索候補を追加していきます -->
+</ul>
 ```
+
+⑤jsファイルのajax()メソッドの後にdoneメソッドでulタグの中にsearchアクションから送られたデータを元にliタグを入れるコード記述
+
+```javascript
 $(document).on('turbolinks:load', function(){ 
     $(document).on('keyup', '#form', function(e){ 
         e.preventDefault(); 
@@ -2674,59 +2800,57 @@ $(document).on('turbolinks:load', function(){
     });   
 });
 ```
-⇒remove()メソッドは、検索して引っかかったliがどんどん増えていかないために付ける。
-⇒つまりは、コントローラーの検索の仕方と、入力されていく文字をeachで回していき完全一致かlike検索で表示する。
 
-★検索窓で入力が空になると全ての結果出でしまう問題について
-◍検索時に文字が入力されている時はきちんと表示されるが、その文字を消して空にした時に全ての検索結果が出てしまうことについては、if文で入力文字あるなら（if(input)）表示をして、空なら（else）liタグを消す流れにすれば良い
-```
-$(document).on('turbolinks:load', function(){ 
-    $(document).on('keyup', '#form', function(e){ 
-        e.preventDefault(); 
-        var input = $.trim($(this).val()); 
-         
-        if(input){　　＃inputがtrueなら（文字があるなら） 
-            $.ajax({ 
-                url: '/users/search', 
-                type: 'GET', 
-                data: ('keyword=' + input),  
-                processData: false, 
-                contentType: false, 
-                dataType: 'json' 
-            }) 
-            .done(function(data){ 
-                $('#result').find('li').remove(); 
-                $(data).each(function(i, user){ 
-                  $('#result').append('<li>' + user.name + '</li>') 
-                });  
-            }) 
-        } else {　　　＃文字がある以外なら（文字が無いなら） 
-            $.ajax({ 
-                url: '/users/search', 
-                type: 'GET', 
-                data: ('keyword=' + input),  
-                processData: false, 
-                contentType: false, 
-                dataType: 'json' 
-            }) 
-            .done(function(){ 
-                $('#result').find('li').remove();   
-            }) 
-        } 
-    });   
-});
+⇒append()は、指定した子要素の最後にテキスト文字やHTML要素を追加することができるメソッドなので、ulにresultをidを置いて、その子要素の最後に足していく  
+⇒remove()メソッドは、検索して引っかかったliがどんどん増えていかないために付ける。(append()メソッドが追加していってしまうから)
+
+🔶重要🔶：検索窓で入力が空になると全ての結果出でしまう問題について
+
+⇒検索時に文字が入力されている時はきちんと表示されるが、その文字を消して空にした時に全ての検索結果が出てしまうことについては、if文で入力文字あるなら（if(input)）表示をして、空なら（else）liタグを消す流れにすれば良い
+
+```javascript
+
+  if(input){ //inputがtrueなら（文字があるなら） 
+      $.ajax({ 
+          url: '/users/search', 
+          type: 'GET', 
+          data: ('keyword=' + input),  
+          processData: false, 
+          contentType: false, 
+          dataType: 'json' 
+      }) 
+      .done(function(data){ 
+          $('#result').find('li').remove(); 
+          $(data).each(function(i, user){ 
+            $('#result').append('<li>' + user.name + '</li>') 
+          });  
+      }) 
+  } else { //文字がある以外なら（文字が無いなら） 
+      $.ajax({ 
+          url: '/users/search', 
+          type: 'GET', 
+          data: ('keyword=' + input),  
+          processData: false, 
+          contentType: false, 
+          dataType: 'json' 
+      }) 
+      .done(function(){ 
+          $('#result').find('li').remove();   
+      }) 
+  } 
 ```
 
-★仕上げ
-```
-<table class="table table-bordered table-warning" style="width: 450px; margin-left: 55px"> 
-   <tr><td>
-　　　<strong>『ユーザー検索』</strong><input type=form id="form" placeholder="ユーザー名を入力してください" style="width:250px"/>
-　 </td></tr> 
-</table> 
-<table id="result" class="table table-hover table-bordered table-sm table-dark mb-3" style="width: 450px; margin-left: 55px" > 
+⑥仕上げ
+
+```html
+<table class="table table-bordered table-warning" style="width: 450px; margin-left: 55px">
+      <tr><td><strong>『ユーザー検索』</strong><input type=form id="form" placeholder="ユーザー名を入力してください" style="width: 250px"/></td></tr>
 </table>
-～～～～～～～～～～～～ ～～～～～～～～～～～～
+<table id="result" class="table table-hover table-bordered table-sm table-dark mb-3" style="width: 450px; margin-left: 55px" >
+</table
+```
+
+```javascript
 .done(function(data){ 
      $('#result').find('tr').remove(); 
      $(data).each(function(i, user){ 
@@ -2735,74 +2859,36 @@ $(document).on('turbolinks:load', function(){
    }) 
 } else { 
     ～省略～   
-.done(function(){ 　　　　　　　　　　　　　＃タグを消す方
+.done(function(){ //タグを消す方
      $('#result').find('tr').remove();   
 })
-
 ```
-◍構造について
+
+★構造について  
+
 ⇒検索されたユーザーが分かりやすようにtableタグの中にapped()メソッドを使ってtrタグをとtdタグを入れるようにした。tableクラスの中にtableクラスをネストは出来ないので、検索窓用のtableタグと結果表示用のtableタグあり。trタグが増えると下に表示されていくのでそれでよい。
-◍ｃｓｓについて
+
+★cssについて
 ⇒このファイルには、上にもう一つのメインtableがあるが、bootstrapのtableクラスを指定するには、tableという名前ではないといけないので、ユーザー検索のtableに関しては、直接タグの中にstyleを指定する
 
+## 最終仕上げ
 
-①Vue.jsを使う
-⇒rails中心
-⇒Vue.jsとrails
-https://hajimeteblog.com/vue-rails/
-◍テックピットの大二郎さんのVue.js練習
-②grape（rails5限定っぽい）
-③railsのapiモード
-Use an API with Ruby on Rails
+★read me確認  
+⇒バージョンと簡単な使い方が書いてあれば。DEMOのgifファイルは欲しい。
+⇒ライセンス確認（違反していないか）
 
+★github関連
+⇒gitignoreに.envファイル（メーラー機能を使っているなら）とconfigのmaster.keyファイル（デフォルトでgitignoreにあり）
+⇒pushする場合、リモートはpublicにすること（プライベートだと相手が見えない）
 
+★partialできるか
+⇒render駆使
 
-仮メモ
-- マークダウン　＃離す
-- vscodeのマークダウンのプレビューが少し嘘注意
-- markdownlint良し
+★seo対策
 
+★cssの設定（画面のデザイン）
+⇒costom.scssにて
 
+* bodyにfont-family一番好きなserifと崩れないためのオプション追加
 
-
-～あとは～
-- githubに削除としてファイルがのこってしまう
-- そのブランチで違うブランチのファイルを気付かず変更し、プッシュしてしまったとき
-- キータまとめ
-- heroku
-
-
-
-◆最終確認
-①read me確認
-◍バージョンと簡単な使い方が書いてあれば。DEMOのgifファイルは欲しい。
-◍ライセンス確認（違反していないか）
-⇒正直OKかどうかは、、herokuに出すくらいなら大丈夫、、MITライセンスでも他人のコードがMITじゃなかったらとかあるが。多くの人が使わなければ、、
-②github関連
-◍gitignoreに.envファイル（メーラー機能を使っているなら）とconfigのmaster.keyファイル（デフォルトでgitignoreにあり）
-◍pushする場合、リモートはpublicにすること（プライベートだと相手が見えない）
-③partialできるか
-◍render駆使
-④heroku
-⑤記録残し
-⑥ＳＥＯ対策
-
-
-
-
-
-
-
-
-
-＝＝cssの設定＝＝
-☆costom
-●bodyにfont-family一番好きなserifと崩れないためのオプション追加
-●navbarにあるbg-ligthというので真っ白くなり、cssとかで色を指定しても変わらないので外す！navbarクラスにbackgroundで色付け
-＝＝疑問＝＝
-●後から追加するreferencesはforeign_keyの記述がないがいいのか
-◍javascriptのnew Arrayに（）が無い
-＝＝勉強＝＝
-●N+1問題
-使える質問
-●２－４、２－５、５－３
+* navbarにあるbg-ligthというので真っ白くなり、cssとかで色を指定しても変わらないので外す！navbarクラスにbackgroundで色付け
