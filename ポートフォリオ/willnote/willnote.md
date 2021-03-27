@@ -98,18 +98,18 @@ resolved_paths: ['app/javascript/images', 'app/assets/images']
 
 ## ～他の追加～
 
-1. binding.pryを使えるようにするため、gemfileに`gem 'pry-rails'`と入れてbundleし、ついでに`gem 'pry-byebug'`も入れる.
+1. binding.pryを使えるようにするため、gemfileに`gem 'pry-rails'`と入れてbundleし、ついでに`gem 'pry-byebug'`も入れる.  
 ⇒pry-railsは、binding.pryを記述してデバッグできる  
 ⇒pry-byebugは、binding.pryで止めた所から、nextコマンドなどが使える。（使うには、`require 'pry'`を記述する）  
 ⇒開発とテスト環境どちらでも使うため、group :development, :test doに入れる。  
 
 2. ビューでリンクがリンクとして認識されるように、gem "rails-autolink"も付ける（p180）
 
-3. railsのエラーを日本語で出るように、ターミナルで（アプリケーション下で）
-⇒`wget https://raw.githubusercontent.com/svenfuchs/rails-i18n/master/rails/locale/ja.yml -P config/locales/`
+3. railsのエラーを日本語で出るように、ターミナルで（アプリケーション下で）  
+⇒`wget https://raw.githubusercontent.com/svenfuchs/rails-i18n/master/rails/locale/ja.yml -P config/locales/`  
 ⇒を打つと、**config/locales/ja.ymlファイル**に一式がセーブされる。次に、config/initializersの中にlocale.rbというファイルを作成して、そこに
-⇒`Rails.application.config.i18n.default_locale = :ja`を記述。
-⇒モデルが作成され、そのデータの表記を日本語化する時は、config/locales/ja.ymlの中のerrorsと同じ真下にmodelsを記述。インデントして小文字でモデル名を書いて、attributesをmodels直下に書いてから始まる。（速習ｐ１０１。必ずerrors:の直下にmodelsを置くこと。attributes:の後のモデル名を書いたら、次のカラムはインデントすること)
+⇒`Rails.application.config.i18n.default_locale = :ja`を記述。  
+⇒モデルが作成され、そのデータの表記を日本語化する時は、config/locales/ja.ymlの中のerrorsと同じ真下にmodelsを記述。インデントして小文字でモデル名を書いて、attributesをmodels直下に書いてから始まる。（速習ｐ１０１。必ずerrors:の直下にmodelsを置くこと。attributes:の後のモデル名を書いたら、次のカラムはインデントすること)  
 ⇒configのja.ymlにはerrorsメソッドがあり、モデルを作らないsessionなどは、ymlに記載がないのでerrorsメソッドが使えない。コントローラーでalertを設定して、bootstrapのalertをviewに使う
 
 4. config/application.rbのmoduleの中に、
@@ -148,7 +148,7 @@ config.active_record.default_timezone = :local
 
 ```
 
-* editやnewページで更新保存した時にエラーメッセージが出るようにする。（p140）
+* editやnewページで更新保存した時にエラーメッセージが出るようにする。（p140）  
 ⇒下記のは、確かテックピット式
 
 ```html
@@ -191,7 +191,7 @@ config.active_record.default_timezone = :local
 
 🔺後で追加
 
-* admin追加（boolean  null無し）
+* admin追加（boolean  null無し）  
 ⇒password_digestとhas_secureでpasswordとconfirmation属性が出来る  
 ⇒idと更新日時はrailsが自動的に用意してくれる  
 
@@ -218,13 +218,13 @@ config.active_record.default_timezone = :local
 ⇒editアクションでデータを取得（`@note = Note.find(params[:id])`）
 ⇒updateアクションでは、データを取得しなおして、updateメソッドを使う
 
-③viewの編集
+③viewの編集  
 ⇒Noteモデル用のymlファイルを編集（ｐ１０１）
 
-* newアクション用のビューはform_withで作る
+* newアクション用のビューはform_withで作る  
 ⇒form_withメソッドの引数に@note（このインスタンスを使う）、classにform-groupとform-controlを使用。
 
-* indexアクション用のビュー
+* indexアクション用のビュー  
 ⇒`@notes = Note.all`で登録されたデータをtableタグと@notesで表示できるようにする
 ⇒i18nを設定していると`Model.human_attribute_name(attribute) メソッド`を使うことで、モデル名と属性名を透過的に参照できるようになる。
 （`<th><%= Note.human_attribute_name(:name) %></th>`）
@@ -235,27 +235,27 @@ config.active_record.default_timezone = :local
 
 ⇒名称をshowへのリンクに変える箇所（`<%= note.name%>を<%= link_to note.name, note_path(note) %>に変える所`）では、link_toのキャプチャの部分をeach文のブロック変数のnameをそのまま使う
 
-* showアクション用のビュー
+* showアクション用のビュー  
 ⇒showページでは既にあるデータをfindで引っ張り、@noteに入れて、ビューの@note.nameといった形で引きせるようにする。
 
 ⇒urlリクエストで"notes/1"の１というidを付けたパスをリクエストし、その１をparams[:id]の[:id]に入れ、それを元にfindで検索をする。つまり、showページは、notes/1とかnotes/2などそれぞれページが存在し、そのidへのリクエストがあれば、コントローラーでparams形式でそのidを受け取り、そのページを表示するという命令になっている。
 
-⇒つまり、作成するときは、.newの命令。既にあるデータを表示するには、find(params[:id])。idを引っ張るだけでそのデータ全体が得られる。params[:name]ではどのnameかわからない（idで引っ張ると一意のデータを取得できる）
-⇒showページではデータの取得については、each~endを使わずそのまま取得している。
+⇒つまり、作成するときは、.newの命令。既にあるデータを表示するには、find(params[:id])。idを引っ張るだけでそのデータ全体が得られる。params[:name]ではどのnameかわからない（idで引っ張ると一意のデータを取得できる）  
+⇒showページではデータの取得については、each~endを使わずそのまま取得している。  
 ⇒showのビューページの`<td><%= simple_format(h(@note.memo1), {}, sanitize: false, wrapper_tag: "div") %></td>`については、P113の説明がわかりやすい。（memoに多くの文章や改行が入ることを想定して、型崩れしないようにするrailsのメソッド）
 
 ④編集ページとリンクとupdateとパーシャル
 
-⇒showと同じく元々あるデータから引っ張るから、find(params[:id])を使う。
+⇒showと同じく元々あるデータから引っ張るから、find(params[:id])を使う。  
 ⇒newビューの状態をそのまま更新するのだから、newと同じコードになり、newとeditのコードはパーシャルする。  
 （editビューはnewと違ってfindでデータを取得するから、ページのフォームには値が入っている。）
 
 ⇒パーシャルの関係上、submitのキャプチャはnilに、囲んでいるクラスの名前は揃える（notenewPageをnotePageに）  
 （`<%= render "partialnote/form" %>`）
 
-④redirect_toへのフラッシュメッセージ（p107）
-⇒createのsubmitはi18より、キャプチャのところをnilにするとそのまま名前を入れてくれるのでnilにする。
-⇒フラッシュメッセージも編集の更新(update)と新規登録の保存(create)で共通で使うので、フラッシュメッセージが表示される先のファイル、つまり編集してアップデートをした先のroot_pathに行くので、indexビューファイルの一番上の行にrenderパーシャルを置いて上に表示されるようにする。
+④redirect_toへのフラッシュメッセージ（p107）  
+⇒createのsubmitはi18より、キャプチャのところをnilにするとそのまま名前を入れてくれるのでnilにする。  
+⇒フラッシュメッセージも編集の更新(update)と新規登録の保存(create)で共通で使うので、フラッシュメッセージが表示される先のファイル、つまり編集してアップデートをした先のroot_pathに行くので、indexビューファイルの一番上の行にrenderパーシャルを置いて上に表示されるようにする。  
 
 ```html
 <% if flash.notice.present? %>
@@ -296,13 +296,13 @@ $(function(){
 
 * password_digestカラム作成される
 
-* Userモデルに`has_secure_password`設定、
+* Userモデルに`has_secure_password`設定  
 ⇒データベースにpasswordとpassword_confirmation属性が追加される
 
-* `gem bcrypt`(コメントアウトをはずす)⇒bundle忘れずに
+* `gem bcrypt`(コメントアウトをはずす)  
+⇒bundle忘れずに
 
-⇒次に、usersテーブルにadminというカラムを追加するために
-
+* 次に、usersテーブルにadminというカラムを追加するために  
 ⇒`rails g migration add_admin_to_users`（マイグレファイルを追加）
 
 ⇒`add_column :users, :admin, :boolean, default: false, null: false`（usersテーブルにadminというカラムをboolean型で追加）
@@ -501,7 +501,7 @@ end
 
 ⇒ここでこの定義をすることにより、以下のメソッドが使えるようになる。
 
-* user.notes
+* user.notes  
 （Userクラスのインスタンスから紐づいたNoteオブジェクト一覧を得られる。これは、ログイン状態でcurrent_userメソッドがtrueな時は、current_user.notesでも得られる！user.notesと同じことになる）
 
 * note.user(タスクにおいてユーザーは一人しかいないから単数形？NoteクラスのインスタンスからUserオブジェクトを得られる)
@@ -517,15 +517,15 @@ end
 ⇒よって、コントローラーのそれぞれのアクションをcurrent_userとアソシエを使って表記する。  
 (referencesでuser_idが入ってないnoteデータはnullがfalseになっているので途中で追加する場合、db:resetするかexecuteをする。そして、コントローラーにuser_idを入れるためのコードを記述しなくてはいけない。newは変更なし。)
 
-* create
+* create  
 ⇒@note = current_user.notes.new(note_params)  
 (テックピットはストロングパラメーターにmergeを、速習でこのcreateにmergeを記述する方法も紹介があるが、ここではアソシエーションメソッドを使う。ここで、ただのnoteデータを作るのではなく、今ログインしているcurrent_userを巻き込んでuser_idを一緒に登録する。)
 
-* index
+* index  
 ⇒`@notes = current_user.notes`  
 （Note.allだと全てのユーザーのnoteデータが出てしまうのでcurrent_userで検索する）
 
-* show,edit,update,destroy
+* show,edit,update,destroy  
 ⇒`@note = current_user.notes.find(:params[:id])`  
 （Note.find(params[:id])だけだとid検索をして他のユーザーにidがヒットしてしまう可能性があるので、current_userのみ検索出来るようにする）
 
@@ -748,7 +748,7 @@ private
 
 ⇒出来たら、保存できるか確認をして、コンソールでuser_idが入っているか確認。gifはかなり重い（重すぎると保存できないかも）
 
-* gitにおけるオプションあり
+* gitにおけるオプションあり  
 ⇒githubでコードを管理している場合、今のままだと、画像をアップロードする度に画像がコミット対象になるので、gitignoreファイルに以下のコードを追加してアップロードした画像はコミットしないようにする。
 (`public/uploads/`)
 
@@ -783,7 +783,7 @@ private
 
 * グリッドシステムを使って、画像のエリアを真ん中に固定(`<div class="col-md-6 col-md-2 mx-auto">`)
 
-* cssは、画像のインポートは、下記の準備によりできている
+* cssは、画像のインポートは、下記の準備によりできている  
 ⇒configのwebpacker.ymlで`resolved_paths: ['app/javascript/images', 'app/assets/images']`を追加
 
 ③管理者用のナビバー作成と投稿ページ仕上げ
@@ -891,7 +891,7 @@ end
 
 * user_id(references型 null無し)
 
-* 検証
+* 検証  
 ⇒belongs_to :user  
 ⇒belongs_to :post  
 ⇒validates :user_id, uniqueness: { scope: :post_id }  
@@ -1191,8 +1191,8 @@ $('#comment-post-<%= @post.id.to_s %>').
 
 🔶重要🔶create.js.erbの`$('#comment-form-post-<%= @post.id.to_s %> #comment_comment').val("");`について
 
-* 上記の機能は２つ
-⇒コメント欄に入力された値を送信したら、入力欄にも値が残らないようにする。（.val("")で空欄を入れる）
+* 上記の機能は２つ  
+⇒コメント欄に入力された値を送信したら、入力欄にも値が残らないようにする。（.val("")で空欄を入れる）  
 ⇒`#comment_comment`が無いと入力してもエラーになる
 
 * ここでは、form_withを囲むクラスのform-postのidからさらに、form_with内で自動生成されたinputタグのidであるcomment_commentをドルメソッドで参照して、その要素のvalueの中身を空欄にしている（**Rails 記法参照**）
@@ -1227,13 +1227,13 @@ $('#comment-post-<%= @post.id.to_s %>').
 
 ★仕上げ
 
-* コメントでも一回しかコメント出来ないようにCommentモデルにいいね機能と同じく下記のコードを記述。
+* コメントでも一回しかコメント出来ないようにCommentモデルにいいね機能と同じく下記のコードを記述。  
 ⇒`validates :user_id, uniqueness: { scope: :post_id }`  
 ⇒また、空欄記入や多すぎるコメントを避けるためにcommetカラムにpresenceとlengthの検証をかける  
 
 * 他のコントローラーにlogin_requiredを付ける(sessionコントローラーはdestroyだけ付ける)
 
-* コメントマークにアンカーを付ける。一応詳細ページのコメント入力へ飛ぶようにした
+* コメントマークにアンカーを付ける。一応詳細ページのコメント入力へ飛ぶようにした  
 ⇒参考：[アンカー付け方]<https://qiita.com/tatsuya1156/items/595fe0df912c6c89f991>  
 ⇒最後にshowページのform_withのtext_fieldの中にautofocus:  trueにすれば選択状態になる  
 
@@ -1294,7 +1294,7 @@ $(document).ready(function(){
 </script>
 ```
 
-* 通常の管理人ナビバーにドロアー用のアイコンを付ける
+* 通常の管理人ナビバーにドロアー用のアイコンを付ける  
 ⇒navタグのcurrent_userのみの表示範囲のendの位置調整して、nav-itemもきちんと付けてfontawesomeの大きさを変更してちょうどよい大きさで置く）
 
 ②次にpostの`index.html.erbファイル`のcssを編集
@@ -1377,7 +1377,7 @@ $(document).ready(function(){
 
 4. 追加でドロアーnavタグの中に表題を作るドロアーに上にwillnoteの文字をつける（上記のコードのtitlemarkが付いたコード）
 
-5. 最後に、indexとshowとnewビューのクラス名を同じにしてcssを適用。また、全てのブログ関係用のビューの下にドロアーのファイルをrenderする。
+5. 最後に、indexとshowとnewビューのクラス名を同じにしてcssを適用。また、全てのブログ関係用のビューの下にドロアーのファイルをrenderする。  
 **⇒これで、通常ナビバーが各ビューの一番上にあり（ドロアーのshowクラスが掛かるナビバーがある）、その下のクラスはpostPageクラスに囲まれ、次にcontainerが来る。ビューの一番下では、containerの影響を受けないようにpostPageとcontainerクラスの間にドロアーファイルのrenderがくれば枠組みは完成！**
 
 ### noteタスクのドラッグ＆ドロップとcookie保存
@@ -1497,14 +1497,14 @@ $('#cookieRemove').on('click', function() {
 
 1. ルーティングは、オリジナルで作る（get "/adminhome", to:  "posts#home"）
 
-2. コントローラーにhomeアクション追加（中身は要らない）
+2. コントローラーにhomeアクション追加（中身は要らない）  
 ⇒特にDBとコントローラーからデータを引っ張るビューではないから
 
 3. postビューにhome.html.erbファイル追加して、通常バナーとドロアー、cssを適用するためにページのクラス名をpostPage、containerを記述して書き始める。
 
 ★次に、rails6のwebpackerにおける画像の読み方
 [ここを参考に設定](https://qiita.com/hida-yoshi/items/55dc48477201dc195bb8)  
-⇒``<%= image_pack_tag "coffee.jpg", class: "test" %>``
+⇒`<%= image_pack_tag "coffee.jpg", class: "test" %>`
 
 ★レイアウト
 
@@ -1732,7 +1732,7 @@ $(function() {
 
 4. それぞれの画像をcssで幅と高さを変えて小さく収まるようにする。
 
-5. 次にjqueryコードを書く（下にある小さい各画像をクリックすると、メインの画像が変わるようにする）
+5. 次にjqueryコードを書く（下にある小さい各画像をクリックすると、メインの画像が変わるようにする）  
 ⇒erbのimage_pack_tagの指定はできない？javascriptのままではなく、jqueryの方が指定しやすいかも
 
 🔶重要🔶：ＥＲＢが表示された時のhtmlコードは画面の検証で見ることが出来る。そして、image_pack_tagはhtmlだと、ちゃんとimg～とsrc=""で出力されているので、コードで書いてなくてもimgタグやsrc属性をメソッドの属性値としてセットすることができる！jqrueryメソッドのattr()メソッドでは、（）内で、最初にclassやid、srcなどをセットして、次に属性値やパスを書く。'src'とセットして、次にどこかのネットのhttpsから始まるパスを打てば、src属性をそのパスに変えることができ、画像を出力できる。ここでは、自分がimage_pack_tagのコードをインターネットの検証で見ると、srcの表示もあるので、そのパスをコピーしてattr()メソッドのパスに入れてあげれば、その画像を参照できる。
@@ -1752,7 +1752,7 @@ $(function() {
 
 * content(text null無し)
 
-* 検証：
+* 検証：  
 ⇒validates :name  presence: true,  length: {maximum: 30 }  
 ⇒validates :email  presence: true  
 ⇒validates :content  presence: true  
@@ -1835,11 +1835,11 @@ Did you mean?  contacts_new_path
 
 ⇒cssについて、borderの長さを変えたい時は、要素自体のwidthを％で指定して、margin: 0 auto; で真ん中寄せにする
 
-★入力画面に戻る時に入力したパラメーターを残すためには、、
+★入力画面に戻る時に入力したパラメーターを残すためには、、  
 ⇒[参考](https://remonote.jp/rails-confirm-form)  
 ⇒[参考２](https://www.blograils.com/posts/rails-contactform)  
 
-⇒ルーティングを触ったり、バック用のページを作ったりなど色々あるが、先ず、confirmビューのform_withではcompleteへ繋げるという指定をしている。なので、コントローラーのcompleteアクションにもしbackを使ったら、 `params[:back]`でパラメーターを維持してnewページにrenderするという記述をして、form_withの送信ボタンの所に同じく、submitとしてボタンをおいて、`name: "back"`という決まったコードの記述でデータを維持できる。
+⇒ルーティングを触ったり、バック用のページを作ったりなど色々あるが、先ず、confirmビューのform_withではcompleteへ繋げるという指定をしている。なので、コントローラーのcompleteアクションにもしbackを使ったら、 `params[:back]`でパラメーターを維持してnewページにrenderするという記述をして、form_withの送信ボタンの所に同じく、submitとしてボタンをおいて、`name: "back"`という決まったコードの記述でデータを維持できる。  
 ⇒この`name: "back"のname`は属性の`name`ではなく恐らくメソッド用の`name`。最後にcompleteアクションのparams後にbinding.pryを置いたら、やはり入力内容が入っていた。確認画面の時にwindowsの戻るで戻るとルーティングエラーになるので、必ず戻るボタンで戻るようにコメントを下に書く
 
 ```html
@@ -1884,10 +1884,10 @@ Did you mean?  contacts_new_path
 
 ③acrtionMailerの設定
 
-* まず、googleアカウントを取得(アカウントはevernoteにあり)
+* まず、googleアカウントを取得(アカウントはevernoteにあり)  
 ⇒二段階認証無しで安全性の低いアプリ設定をオンにする
 
-◍次にconfigのenvironmentsの開発と本番にメールの設定を入れる。
+⇒次にconfigのenvironmentsの開発と本番にメールの設定を入れる。
 
 ```ruby
 # 開発
@@ -1933,9 +1933,9 @@ config.action_mailer.perform_caching = false
 ⇒`authenticaiton`の項目を`login`にする  
 ⇒`.gitignore`の一番下に.envを書く
 
-④メーラーの作成（🔺注意🔺：ちょっとでもコードの配置やインデントを間違えるとエラーになる）
-[これも参考に](https://www.blograils.com/posts/rails-contactform)
-⇒rails g mailer contact received_email
+④メーラーの作成（🔺注意🔺：ちょっとでもコードの配置やインデントを間違えるとエラーになる）  
+[これも参考に](https://www.blograils.com/posts/rails-contactform)  
+⇒rails g mailer contact received_email  
 （rails g mailer メーラー名 メソッド名）
 
 結果：
@@ -2047,7 +2047,7 @@ $(function(){
 
 * Userモデルのemailの正規表現とpasswordの制限(🔺注意あり🔺)
 
-[参考](https://note.com/simesime/n/n7b9dbf3a80d6)
+[参考](https://note.com/simesime/n/n7b9dbf3a80d6)  
 [参考：pikawaka](https://pikawaka.com/rails/validation)
 
 ```ruby
@@ -2203,9 +2203,9 @@ git commit -m 'test' --controllers.rb test.rb ＃複数の場合
 
 * admin追加（boolean  null無し）
 
-1. willnoteへのログインの動作確認（userデータが登録されている必要あり）
-2. noteデータがちゃんと登録されるか
-3. ここでは、UserモデルとNoteモデルが紐づいていることも考慮に入れる
+1. willnoteへのログインの動作確認（userデータが登録されている必要あり）  
+2. noteデータがちゃんと登録されるか  
+3. ここでは、UserモデルとNoteモデルが紐づいていることも考慮に入れる  
 
 ⇒以上を踏まえて、速習の順番で進めていく
 
@@ -2305,11 +2305,11 @@ end
 
 #### rspecを使って考えるテスト
 
-★アソシエを結んでいるuserとnoteの関係で（has_many :notes, dependent: :destroy）、ユーザーが削除されると、タスクも消えるか
+★アソシエを結んでいるuserとnoteの関係で（has_many :notes, dependent: :destroy）、ユーザーが削除されると、タスクも消えるか  
 ⇒[ここを参考に](https://qiita.com/paranishian/items/51d3742b7095aa7744ca#%E5%8F%82%E8%80%83)  
 
 ⇒今回user_bがdestroyされたら、changeマッチャを使って、Noteモデルのデータが減るというケースを考える。(上のテストファイル参照)  
-⇒まず、アソシエとログインしないとアプリを使えないので、factorybotを使ってアソシエしたタスクを作って、capybaraを使ってログインをする。
+⇒まず、アソシエとログインしないとアプリを使えないので、factorybotを使ってアソシエしたタスクを作って、capybaraを使ってログインをする。  
 ⇒ここで、it構文の中身をchangeメソッドの書き方でこのように書きたくなるが
 
 ```ruby
@@ -2388,7 +2388,7 @@ RSpec.describe Post, type: :system, js: true do #このテストでは殆んどj
 
 * [javascriptの設定とやり方](https://qiita.com/koki_73/items/ffc115ed542203161cef)
 
-⇒本記事では、featuteテストで行っているがsystemテストでも同じようにできる
+⇒本記事では、featuteテストで行っているがsystemテストでも同じようにできる  
 ⇒describe、context、itのdoの直前に`js: true`を入れるとcapybaraで触れるようになる（jsを使いたい所に記述する）
 
 🔺注意🔺：投稿画像一覧に飛べないエラーについて：下記は通らないコード
@@ -2505,6 +2505,7 @@ let(:mail_body) { mail.body.encoded.split(/\r\n/).map{|i| Base64.decode64(i)}.jo
 ⇒ここでは、マッチャのメソッド（have_subjectなど）を確認。途中のページにある、rails generate email_spec:stepsコマンドをやると、expect内で使えるオプションの内容が見れる）
 
 🔶重要🔶：githubの公式に色々あるが、、基本的には、gemをインストールして、rails_helperに「require"email_spec"」を記述（つけなくてもなぜか動く）
+
 ⇒必ず、rails_helperに
 
 ```ruby
@@ -2530,7 +2531,7 @@ mail.deliver_now
 expect(open_last_email).to deliver_to(ENV["LOGIN_NAME"]) #open_last_emailと使わないとdeliver_toが使えない
 ```
 
-⇒上記のmailはletで定義したメソッドだが、この設定にもきちんとContactモデルからcreateして、そのデータをmailerをジェネレートした時に作ったreceived_emailメソッドに入れてメールを生成すること
+⇒上記のmailはletで定義したメソッドだが、この設定にもきちんとContactモデルからcreateして、そのデータをmailerをジェネレートした時に作ったreceived_emailメソッドに入れてメールを生成すること  
 （このreceived_emailは以下のapp/mailer/contact_mailer.rbというActionMailerでジェネレートした時に作成したクラスのメソッドを持ってきている）
 
 ```ruby
@@ -2573,7 +2574,7 @@ include Discard::Model
 ⇒ビューコードのlink_toのコードは変更しなくて大丈夫（method: :deleteはあくまでルーティングからコントローラーのdestroyアクションに飛ばすための記述）  
 ⇒destroyアクションのdestroyをdiscardに変えると論理削除できる。何も工夫をしないで実際の画面から削除すると、画面にデータが残ったままになってしまうので⑤へ
 
-⑤画面に論理削除されてないユーザーのみ表示する
+⑤画面に論理削除されてないユーザーのみ表示する  
 ⇒Userモデルに下記のコードを記述すると、usersコントローラーindexアクションのUserの後ろに付けるもので表示が変化する
 
 ```ruby
@@ -2598,8 +2599,8 @@ end
 ```
 
 ⑥削除を退会にする  
-⇒ビューの削除ボタン退会に変更
-⇒indexアクションに`@disusers = User.with_discarded.discarded`を記述
+⇒ビューの削除ボタン退会に変更  
+⇒indexアクションに`@disusers = User.with_discarded.discarded`を記述  
 ⇒ユーザー一覧のビューに<%= @disusers.count %>を入れて退会者数が分かるようにする
 
 ```html
@@ -2645,7 +2646,7 @@ rails g kaminari:views bootstrap4
 
 ⇒このコマンドでviewにkaminariディレクトリが作成され、7つのファイルが出来上がる。これらは、表示されるページネーションの一つ一つのボタン（最初ボタン、最後ボタン、ページボタン、次へボタンなど）の表示を扱っており、ここを変えると影響が見られる。
 
-* config/locales/にkaminari_ja.ymlファイルを作り、テンプレート（ピカワカ）を貼る。（この記事はここまで見ればよい）
+* config/locales/にkaminari_ja.ymlファイルを作り、テンプレート（ピカワカ）を貼る。（この記事はここまで見ればよい）  
 ⇒これでページネーションが日本語表記になる
 
 * page_entries_infoもymlファイルで表示を変えられる
@@ -2675,7 +2676,7 @@ rails g kaminari:config
 ★ページネーションｃｓｓの各クラス
 
 * .pagination
-⇒ページネーション全体部分
+⇒ページネーション全体部分  
 ⇒中央寄せするなら
 
 * .page-item
@@ -2695,10 +2696,10 @@ rails g kaminari:config
 
 ⓪最初に流れを簡単に表すと、、
 
-1. クラス名ID名が付いた検索窓を作成（formタグ）
-2. 検索窓から入力されたデータを取得（jqueryのfunctionメソッドとval()メソッド）
-3. 取得したデータをajaxでリクエスト送信（表示したいURLにではなく、中間アクションへ送る）
-4. 中間となるアクションから表示したいページのアクションへrenderするようにする
+1. クラス名ID名が付いた検索窓を作成（formタグ）  
+2. 検索窓から入力されたデータを取得（jqueryのfunctionメソッドとval()メソッド）  
+3. 取得したデータをajaxでリクエスト送信（表示したいURLにではなく、中間アクションへ送る）  
+4. 中間となるアクションから表示したいページのアクションへrenderするようにする  
 5. 表示したいアクションにデータが届いたら、done()メソッドを使って、表示する処理を決め、ビューにその結果を表示するコードを書く
 
 ①先ず、userのindexビューに検索窓を設置
@@ -2742,9 +2743,10 @@ $(document).on('turbolinks:load', function(){
 
 ⇒`data: ('keyword=' + input)`について、ここでは、inputは取得してきた値が入った変数。そしてその内容を、keywordという変数に入れて、その変数をコントローラーで使いデータを渡せるようにする（渡すときは、params[:keyword]で受け取る）
 
-③ajaxで指定したルーティングを作る
+③ajaxで指定したルーティングを作る  
 （一度別のアクションに飛ばして、そのアクションから表示させたいアクションへ飛ばす。この中間アクションにビューは要らない）
-◍ルーティングを設定して、usersコントローラーにsearchアクションを作る。
+
+⇒ルーティングを設定して、usersコントローラーにsearchアクションを作る。
 
 ```ruby
 resources :users, only: %i(index create destroy edit update) do 
@@ -2865,10 +2867,9 @@ $(document).on('turbolinks:load', function(){
 ```
 
 ★構造について  
-
 ⇒検索されたユーザーが分かりやすようにtableタグの中にapped()メソッドを使ってtrタグをとtdタグを入れるようにした。tableクラスの中にtableクラスをネストは出来ないので、検索窓用のtableタグと結果表示用のtableタグあり。trタグが増えると下に表示されていくのでそれでよい。
 
-★cssについて
+★cssについて  
 ⇒このファイルには、上にもう一つのメインtableがあるが、bootstrapのtableクラスを指定するには、tableという名前ではないといけないので、ユーザー検索のtableに関しては、直接タグの中にstyleを指定する
 
 ## 最終仕上げ
@@ -2877,16 +2878,16 @@ $(document).on('turbolinks:load', function(){
 ⇒バージョンと簡単な使い方が書いてあれば。DEMOのgifファイルは欲しい。
 ⇒ライセンス確認（違反していないか）
 
-★github関連
+★github関連  
 ⇒gitignoreに.envファイル（メーラー機能を使っているなら）とconfigのmaster.keyファイル（デフォルトでgitignoreにあり）
 ⇒pushする場合、リモートはpublicにすること（プライベートだと相手が見えない）
 
-★partialできるか
+★partialできるか  
 ⇒render駆使
 
 ★seo対策
 
-★cssの設定（画面のデザイン）
+★cssの設定（画面のデザイン）  
 ⇒costom.scssにて
 
 * bodyにfont-family一番好きなserifと崩れないためのオプション追加
