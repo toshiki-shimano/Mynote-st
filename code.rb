@@ -1,8 +1,6 @@
-array = ["a", "b", "c"]
-sum = "#"
-array.each do |n|
-    sum += n
+i = gets.to_i
+result = 0
+1.upto(i) do |num|
+    result += num
 end
-puts sum
-
-
+print result
