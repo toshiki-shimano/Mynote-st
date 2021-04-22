@@ -68,6 +68,35 @@ Your public key has been saved in /c/Users/toshiki/.ssh/id_rsa.pub
 
 ◍基本rebaseは要らないが、、pullのrebaseは使えそう？他にも、コミット複数やり直しのrebase -i HEAD~3
 
+## 基本の流れ
+
+★masterにpushすることはなく、自身の与えられたブランチで開発をして、プルリクをmasterの方にする、マージされたらpullをしてmasterにoutして最新を引っ張る
+
+①作成したディレクトリにcdをして、そこでgit init(git対象にする)
+
+②次に、何かファイルの内容を変更したら、ステージングをするためgit add .をする
+
+③`git commit -m 'firstcommit'`でコミットする
+
+④githubでnewリポジトリをして（特に設定は無い）、sshのアドレスを確保
+
+⑤ターミナルで`git remote add origin sshのキー`で指定したsshアドレスをoriginという名前で登録（そのローカルディレクトリのgitでは）
+
+⑥`git push origin master`で一応pushはできる。
+
+⑦基本はmasterでpullをして最新情報にしておく
+
+⑧`git checkout -b feature`でブランチ作成
+⇒-b の後に新しいブランチ名。これでローカルではそのブランチが作成される。
+
+⑨featureブランチでファイルを変更して、addとcommitをして、、
+⇒`git push origin feature`とやるとこの時に初めてgitサーバー（リモート）にブランチが作られる。
+
+⑩仮に自身のブランチをmasterに入れていく予定なら、githubでmasterブランチへプルリクをして、マージしてもらう。そして、`git checkout master`で切り替えて、pullをして最新にする。(git pull origin master)
+🔺注意🔺；基本、ローカルで勝手にマージすることはなく（個人ではなくチームでなら）、プルリクを経て開発を進めていく。
+⇒`git fetch`は、最新の情報を引っ張るのみ
+⇒`git merge`は、それを引っ張り更新（fetchとmergeを同時がpull）
+
 ### ポートフォリオの上げ方
 
 * gitignoreファイルに.envファイル（メーラー機能を使っているなら）とconfigのmaster.keyファイル（デフォルトでgitignoreにあり）を追加
@@ -98,7 +127,6 @@ git commit -m 'test' --controllers.rb test.rb ＃複数の場合
 ```
 
 ⇒だたこれは、ステージングさえしなければ良い。コミットするものだけをステージングするようにしていく。
-
 
 ### rebase
 
