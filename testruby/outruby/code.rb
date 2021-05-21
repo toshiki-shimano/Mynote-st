@@ -1,24 +1,21 @@
-a = 0.1
-b = 3.0
-print (a.rationalize * b.rationalize).to_f
+UNITS = {m: 1.0, ft: 3.28, in: 39.37}
+def convert_length(length, from: :m, to: :m)
+    (length / UNITS[from] * UNITS[to]).round(2)
+end
 
-
-
-
-# def fizz_bug(inte)
+# def fizz_buzz(inte)
 #     if inte % 15 == 0 && inte >= 15
-#         puts "Fizz Buzz"
+#         "Fizz Buzz"
 #     elsif inte % 5 == 0 && inte >= 5
-#         puts "Buzz"
+#         "Buzz"
 #     elsif inte % 3 == 0 && inte >= 3
-#         puts "Fizz"
+#         "Fizz"
 #     else
-#         puts inte
+#           inte.to_s
 #     end
 # end
 
-# i = 1
-# while i < 16 do
-#     fizz_bug(i)
-#     i += 1
-# end
+
+
+
+
