@@ -1,19 +1,21 @@
-UNITS = {m: 1.0, ft: 3.28, in: 39.37}
-def convert_length(length, from: :m, to: :m)
-    (length / UNITS[from] * UNITS[to]).round(2)
+module DeepFreezable
+  def deep_freeze(array_or_hash)
+    case array_or_hash
+    
+    when Array
+        array_or_hash.each do |element|
+          element.freeze
+        end
+     
+    when Hash 
+      array_or_hash.each do |key, value|
+        key.freeze
+        value.freeze
+      end
+    end  
+      array_or_hash.freeze #注意が、フリーズメソッドがレシーバ自身を返すので、当引数に入った値がそのまま返る 
+  end
 end
-
-# def fizz_buzz(inte)
-#     if inte % 15 == 0 && inte >= 15
-#         "Fizz Buzz"
-#     elsif inte % 5 == 0 && inte >= 5
-#         "Buzz"
-#     elsif inte % 3 == 0 && inte >= 3
-#         "Fizz"
-#     else
-#           inte.to_s
-#     end
-# end
 
 
 
